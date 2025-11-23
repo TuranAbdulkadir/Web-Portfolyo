@@ -3,66 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdulkadir Turan | Linkler</title>
+    <title>Abdulkadir Turan | Portfolyo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* GENEL AYARLAR */
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #111;
+            font-family: 'Poppins', sans-serif;
             color: white;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            /* Hareketli Arka Plan */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
         }
-        .container {
+
+        /* Arka plan animasyonu */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* BUZLU CAM KART TASARIMI */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05); /* Yarı saydam beyaz */
+            backdrop-filter: blur(10px); /* Buzlu cam efekti */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
             text-align: center;
             width: 90%;
-            max-width: 400px;
+            max-width: 380px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         }
+
+        /* Profil Resmi */
         .profile-img {
-            width: 120px;
-            height: 120px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
-            border: 3px solid #00ff88;
-            margin-bottom: 15px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
             object-fit: cover;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
         }
-        h1 { margin: 10px 0; font-size: 22px; }
-        p { color: #888; margin-bottom: 30px; }
-        
+
+        .profile-img:hover {
+            transform: scale(1.05) rotate(3deg);
+            border-color: #00d2ff;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin: 10px 0 5px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        p {
+            color: #ccc;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        /* BUTON TASARIMI */
         .btn {
-            display: block;
-            background-color: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
             text-decoration: none;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            border: 1px solid #333;
-            transition: 0.3s;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 50px; /* Hap şeklinde buton */
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .btn:hover {
+            background: white;
+            color: #302b63;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             font-weight: bold;
         }
-        .btn:hover {
-            background-color: #00ff88;
-            color: black;
-            transform: scale(1.02);
+
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Alt kısım */
+        .footer {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #ffffff50;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Profil">
+    <div class="glass-card">
+        <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Abdulkadir Turan">
         
         <h1>Abdulkadir Turan</h1>
-        <p>Bilgisayar Programcılığı Öğrencisi 💻</p>
+        <p>Bilgisayar Programcılığı Öğrencisi 🚀</p>
 
-        <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">GitHub Profilim</a>
-        <a href="mailto:abdulkadirturan524@gmail.com" class="btn">Bana E-Mail At</a>
-        <a href="https://www.linkedin.com/" class="btn" target="_blank">LinkedIn (Yakında)</a>
+        <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">
+            <span class="icon">💻</span> GitHub Profilim
+        </a>
+        
+        <a href="mailto:abdulkadirturan524@gmail.com" class="btn">
+            <span class="icon">✉️</span> Bana E-Posta At
+        </a>
+        
+        <a href="https://www.linkedin.com/" class="btn" target="_blank">
+            <span class="icon">👔</span> LinkedIn Hesabım
+        </a>
+
+        <div class="footer">
+            © 2025 Abdulkadir Turan - Tasarım & Kodlama
+        </div>
     </div>
 
 </body>
