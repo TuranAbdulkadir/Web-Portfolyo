@@ -3,250 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdulkadir Turan | Yazılım Geliştirici</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <title>Abdulkadir Turan | Portfolyo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code&display=swap" rel="stylesheet">
     
     <style>
-        /* --- PROFESYONEL AYARLAR --- */
+        /* --- GENEL AYARLAR --- */
         :root {
-            --primary-color: #00d2ff; /* Siber Mavi */
-            --bg-overlay: rgba(10, 15, 30, 0.92); /* Daha koyu filtre */
-            --glass-bg: rgba(20, 30, 50, 0.3); /* Kart Arka Planı */
-            --glass-border: rgba(100, 200, 255, 0.1); /* Kart Kenarlığı */
+            --primary: #00d2ff;
+            --secondary: #7000ff;
+            --dark: #0a0a0a;
+            --glass: rgba(20, 30, 50, 0.6);
+            --border: rgba(100, 200, 255, 0.1);
         }
+
+        html { scroll-behavior: smooth; }
 
         body {
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            color: #e6f1ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden; /* Taşmaları gizle */
-            position: relative;
-            background-color: #0a0a0a;
+            color: #fff;
+            background-color: var(--dark);
+            overflow-x: hidden;
         }
 
-        /* --- ARKA PLAN KATMANLARI --- */
-        
-        /* 1. Sabit Kod Resmi (En arkada) */
-        .bg-image {
+        /* --- ARKA PLAN (SABİT) --- */
+        .bg-fixed {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
-                        url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?q=80&w=2070&auto=format&fit=crop');
+            background: linear-gradient(rgba(5, 10, 20, 0.9), rgba(5, 10, 20, 0.9)), 
+                        url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?q=80&w=2070');
             background-size: cover;
             background-position: center;
             z-index: -2;
-            filter: blur(3px); /* Hafif bulanıklık derinlik katar */
         }
 
-        /* 2. Kayan İsim Animasyonu (Ortada) */
-        .scrolling-text-container {
+        /* --- NAVBAR (ÜST MENÜ) --- */
+        nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; width: 100%;
+            padding: 20px 0;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
             display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            z-index: -1; /* Kartın arkasında */
-            opacity: 0.06; /* Çok hafif görünür */
-            pointer-events: none;
-            transform: rotate(-15deg) scale(1.5); /* Çapraz duruş */
+            justify-content: center;
         }
-
-        .scrolling-row {
-            font-family: 'Fira Code', monospace; /* Kod yazı tipi */
-            font-size: 5rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            white-space: nowrap;
+        
+        nav ul {
+            list-style: none;
+            padding: 0; margin: 0;
             display: flex;
+            gap: 30px;
         }
 
-        /* Sola Kayan Satır */
-        .scroll-left { animation: scrollLeft 30s linear infinite; }
-        /* Sağa Kayan Satır */
-        .scroll-right { animation: scrollRight 35s linear infinite; }
-
-        @keyframes scrollLeft {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-        @keyframes scrollRight {
-            from { transform: translateX(-50%); }
-            to { transform: translateX(0); }
-        }
-
-
-        /* --- ANA KART (En önde) --- */
-        .card {
-            position: relative;
-            z-index: 10; /* En üstte */
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px); /* Daha güçlü buzlu cam */
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 45px 30px;
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 210, 255, 0.4);
-        }
-
-        /* Profil Resmi */
-        .profile-wrapper {
-            position: relative;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto 20px;
-        }
-
-        .profile-img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-            object-fit: cover;
-            padding: 4px;
-            background: rgba(255,255,255,0.05);
-        }
-
-        /* İsim ve Ünvan */
-        h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            color: #ffffff;
-            letter-spacing: -0.5px;
-        }
-
-        .title {
-            color: var(--primary-color);
+        nav a {
+            color: #fff;
+            text-decoration: none;
             font-size: 0.9rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
-            display: block;
+            transition: 0.3s;
         }
 
-        .school {
-            color: #8892b0;
-            font-size: 0.9rem;
-            margin-bottom: 35px;
-            font-weight: 300;
-        }
+        nav a:hover { color: var(--primary); }
 
-        /* Butonlar */
-        .links {
+        /* --- BÖLÜMLER ORTAK AYARI --- */
+        section {
+            min-height: 100vh;
+            padding: 80px 20px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-
-        .btn {
-            display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 16px;
-            border-radius: 12px;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* --- GİRİŞ BÖLÜMÜ (HERO) --- */
+        .hero-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            box-shadow: 0 0 50px rgba(0, 210, 255, 0.1);
+            animation: fadeIn 1.5s ease;
+        }
+
+        .profile-img {
+            width: 150px; height: 150px;
+            border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.1);
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .hero-title { font-size: 2rem; font-weight: 700; margin: 10px 0; }
+        .hero-subtitle { color: var(--primary); font-family: 'Fira Code', monospace; margin-bottom: 30px; display: block;}
+
+        .btn-main {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: #000;
             text-decoration: none;
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
-            font-weight: 500;
-            font-size: 0.95rem;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .btn-main:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--primary); }
+
+        /* --- PROJELER BÖLÜMÜ --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
         }
 
-        .btn:hover {
-            background: rgba(0, 210, 255, 0.15);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: translateX(5px);
+        .project-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 25px;
+            transition: 0.3s;
         }
 
-        .btn.soon {
-            background: transparent;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            color: #666;
-            cursor: default;
-        }
-        .btn.soon:hover {
-            transform: none;
-            background: transparent;
-            border-color: #888;
-            color: #888;
+        .project-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            border-color: var(--primary);
         }
 
-        .icon { margin-right: 12px; font-size: 1.1rem; }
+        .project-card h3 { margin-top: 0; color: var(--primary); }
+        .project-card p { color: #ccc; font-size: 0.9rem; line-height: 1.5; }
+        .project-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--primary);
+        }
 
-        /* Footer */
-        .footer {
-            margin-top: 30px;
-            font-size: 0.75rem;
+        /* --- YETENEKLER --- */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .skill-tag {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #000;
             color: #555;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding-top: 20px;
+            font-size: 0.8rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobil Uyum */
+        @media (max-width: 600px) {
+            h2 { font-size: 2rem; }
+            .hero-card { padding: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-image"></div>
-    
-    <div class="scrolling-text-container">
-        <div class="scrolling-row scroll-left">
-            &nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN
-        </div>
-        <div class="scrolling-row scroll-right">
-            &nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER
-        </div>
-        <div class="scrolling-row scroll-left">
-            &nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN
-        </div>
-    </div>
+    <div class="bg-fixed"></div>
 
+    <nav>
+        <ul>
+            <li><a href="#home">Giriş</a></li>
+            <li><a href="#projects">Projeler</a></li>
+            <li><a href="#skills">Yetenekler</a></li>
+        </ul>
+    </nav>
 
-    <div class="card">
-        <div class="profile-wrapper">
-            <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Abdulkadir Turan">
+    <section id="home">
+        <div class="hero-card">
+            <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Profil">
+            <h1 class="hero-title">Abdulkadir Turan</h1>
+            <span class="hero-subtitle">&lt;Computer Programmer /&gt;</span>
+            <p style="color: #ccc; margin-bottom: 30px;">
+                Çukurova Üniversitesi'nde öğrenciyim. Python, Otomasyon ve Web Teknolojileri üzerine modern çözümler üretiyorum.
+            </p>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <a href="https://github.com/TuranAbdulkadir" target="_blank" class="btn-main">GitHub</a>
+                <a href="mailto:abdulkadirturan524@gmail.com" class="btn-main" style="background: transparent; border: 2px solid var(--primary); color: #fff;">İletişim</a>
+            </div>
         </div>
-        
-        <h1>Abdulkadir Turan</h1>
-        <span class="title">Bilgisayar Programcılığı</span>
-        <p class="school">Çukurova Üniversitesi 🎓</p>
+    </section>
 
-        <div class="links">
-            <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">
-                <span class="icon">💻</span> GitHub Profilim
-            </a>
+    <section id="projects">
+        <h2>Projelerim</h2>
+        <div class="projects-grid">
             
-            <a href="mailto:abdulkadirturan524@gmail.com" class="btn">
-                <span class="icon">✉️</span> İletişime Geç
-            </a>
-            
-            <a href="#" class="btn soon">
-                <span class="icon">🔒</span> LinkedIn (Yakında)
-            </a>
-        </div>
+            <div class="project-card">
+                <h3>📁 Dosya Düzenleyici</h3>
+                <p>Python ile geliştirdiğim, masaüstündeki karışık dosyaları türlerine göre (Resim, Video, Belge) otomatik klasörleyen otomasyon aracı.</p>
+                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link">Kodu İncele &rarr;</a>
+            </div>
 
-        <div class="footer">
-            © 2025 Abdulkadir Turan<br>Designed for Future
+            <div class="project-card">
+                <h3>📘 QBasic Notlarım</h3>
+                <p>Programlama temelleri dersi için hazırladığım algoritmalar, döngüler ve hesaplama örneklerini içeren kapsamlı arşiv.</p>
+                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link">Kodu İncele &rarr;</a>
+            </div>
+
+            <div class="project-card">
+                <h3>🧮 Hesap Makinesi</h3>
+                <p>Temel matematiksel işlemleri yapan, fonksiyonel ve hata yakalama özellikleri olan Python uygulaması.</p>
+                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link">Kodu İncele &rarr;</a>
+            </div>
+
+             <div class="project-card">
+                <h3>🌐 Web Portfolyo</h3>
+                <p>Şu an baktığınız bu web sitesi. HTML5 ve CSS3 kullanılarak, modern Glassmorphism tasarımıyla geliştirildi.</p>
+                <a href="#" class="project-link">Canlıdasınız &rarr;</a>
+            </div>
+
         </div>
-    </div>
+    </section>
+
+    <section id="skills">
+        <h2>Yeteneklerim</h2>
+        <div class="skills-container">
+            <div class="skill-tag">Python</div>
+            <div class="skill-tag">HTML5 & CSS3</div>
+            <div class="skill-tag">QBasic</div>
+            <div class="skill-tag">Algoritma</div>
+            <div class="skill-tag">VS Code</div>
+            <div class="skill-tag">Git & GitHub</div>
+            <div class="skill-tag">Otomasyon</div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Abdulkadir Turan. Tüm hakları saklıdır.</p>
+        <p>Designed with 💻 & ☕</p>
+    </footer>
 
 </body>
 </html>
