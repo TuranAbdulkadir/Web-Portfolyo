@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abdulkadir Turan | Yazılım Geliştirici</title>
-    <!-- Modern Yazı Tipi: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
     
     <style>
         /* --- PROFESYONEL AYARLAR --- */
         :root {
             --primary-color: #00d2ff; /* Siber Mavi */
-            --bg-overlay: rgba(10, 25, 47, 0.85); /* Koyu Lacivert Filtre */
-            --glass-bg: rgba(255, 255, 255, 0.03); /* Kart Arka Planı */
-            --glass-border: rgba(255, 255, 255, 0.1); /* Kart Kenarlığı */
+            --bg-overlay: rgba(10, 15, 30, 0.92); /* Daha koyu filtre */
+            --glass-bg: rgba(20, 30, 50, 0.3); /* Kart Arka Planı */
+            --glass-border: rgba(100, 200, 255, 0.1); /* Kart Kenarlığı */
         }
 
         body {
@@ -25,33 +24,85 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            
-            /* Arka Plan: Kodlama Ekranı */
-            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
-                        url('https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            overflow: hidden; /* Taşmaları gizle */
+            position: relative;
+            background-color: #0a0a0a;
         }
 
-        /* Ana Kart */
+        /* --- ARKA PLAN KATMANLARI --- */
+        
+        /* 1. Sabit Kod Resmi (En arkada) */
+        .bg-image {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            filter: blur(3px); /* Hafif bulanıklık derinlik katar */
+        }
+
+        /* 2. Kayan İsim Animasyonu (Ortada) */
+        .scrolling-text-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            z-index: -1; /* Kartın arkasında */
+            opacity: 0.06; /* Çok hafif görünür */
+            pointer-events: none;
+            transform: rotate(-15deg) scale(1.5); /* Çapraz duruş */
+        }
+
+        .scrolling-row {
+            font-family: 'Fira Code', monospace; /* Kod yazı tipi */
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            white-space: nowrap;
+            display: flex;
+        }
+
+        /* Sola Kayan Satır */
+        .scroll-left { animation: scrollLeft 30s linear infinite; }
+        /* Sağa Kayan Satır */
+        .scroll-right { animation: scrollRight 35s linear infinite; }
+
+        @keyframes scrollLeft {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        @keyframes scrollRight {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0); }
+        }
+
+
+        /* --- ANA KART (En önde) --- */
         .card {
+            position: relative;
+            z-index: 10; /* En üstte */
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px); /* Daha güçlü buzlu cam */
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 45px 30px;
             text-align: center;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
             transition: transform 0.3s ease;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            border-color: rgba(0, 210, 255, 0.3);
+            border-color: rgba(0, 210, 255, 0.4);
         }
 
         /* Profil Resmi */
@@ -121,13 +172,12 @@
         }
 
         .btn:hover {
-            background: rgba(0, 210, 255, 0.1);
+            background: rgba(0, 210, 255, 0.15);
             border-color: var(--primary-color);
             color: var(--primary-color);
-            transform: translateX(5px); /* Sağa hafif kayma efekti */
+            transform: translateX(5px);
         }
 
-        /* LinkedIn Pasif Buton Stili */
         .btn.soon {
             background: transparent;
             border: 1px dashed rgba(255, 255, 255, 0.2);
@@ -155,9 +205,23 @@
 </head>
 <body>
 
+    <div class="bg-image"></div>
+    
+    <div class="scrolling-text-container">
+        <div class="scrolling-row scroll-left">
+            &nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN
+        </div>
+        <div class="scrolling-row scroll-right">
+            &nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER&nbsp;SOFTWARE DEVELOPER
+        </div>
+        <div class="scrolling-row scroll-left">
+            &nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN&nbsp;ABDULKADIR TURAN
+        </div>
+    </div>
+
+
     <div class="card">
         <div class="profile-wrapper">
-            <!-- Profil Resmi -->
             <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Abdulkadir Turan">
         </div>
         
@@ -166,18 +230,14 @@
         <p class="school">Çukurova Üniversitesi 🎓</p>
 
         <div class="links">
-            <!-- GitHub Butonu -->
             <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">
                 <span class="icon">💻</span> GitHub Profilim
             </a>
             
-            <!-- Email Butonu -->
             <a href="mailto:abdulkadirturan524@gmail.com" class="btn">
                 <span class="icon">✉️</span> İletişime Geç
             </a>
             
-            <!-- LinkedIn (Pasif/Yakında) -->
-            <!-- href="#" tıklandığında bir yere gitmemesini sağlar -->
             <a href="#" class="btn soon">
                 <span class="icon">🔒</span> LinkedIn (Yakında)
             </a>
