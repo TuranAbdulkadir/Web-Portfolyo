@@ -3,135 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdulkadir Turan | Portfolyo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Abdulkadir Turan | Yazılım Geliştirici</title>
+    <!-- Modern Yazı Tipi: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* GENEL AYARLAR */
+        /* --- PROFESYONEL AYARLAR --- */
+        :root {
+            --primary-color: #00d2ff; /* Siber Mavi */
+            --bg-overlay: rgba(10, 25, 47, 0.85); /* Koyu Lacivert Filtre */
+            --glass-bg: rgba(255, 255, 255, 0.03); /* Kart Arka Planı */
+            --glass-border: rgba(255, 255, 255, 0.1); /* Kart Kenarlığı */
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
-            color: white;
+            font-family: 'Inter', sans-serif;
+            color: #e6f1ff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             
-            /* --- YENİ ARKA PLAN AYARLARI --- */
-            /* Hem resim koyuyoruz hem de üzerine karanlık bir filtre (overlay) atıyoruz ki yazılar okunsun */
-            background: linear-gradient(rgba(15, 12, 41, 0.8), rgba(48, 43, 99, 0.8)), url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-            background-size: cover; /* Resmi ekrana yay */
-            background-position: center; /* Resmi ortala */
-            background-attachment: fixed; /* Sayfa kaydırılsa da resim sabit kalsın */
+            /* Arka Plan: Kodlama Ekranı */
+            background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), 
+                        url('https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
-        /* BUZLU CAM KART TASARIMI */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05); /* Çok hafif beyazlık */
-            backdrop-filter: blur(12px); /* Arkadaki kod resmini bulanıklaştırır */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
+        /* Ana Kart */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 45px 30px;
             text-align: center;
             width: 90%;
-            max-width: 380px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6); /* Daha derin gölge */
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 210, 255, 0.3);
         }
 
         /* Profil Resmi */
+        .profile-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+        }
+
         .profile-img {
-            width: 130px;
-            height: 130px;
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
-            border: 3px solid #00d2ff; /* Neon mavi çerçeve */
+            border: 3px solid rgba(255, 255, 255, 0.1);
             object-fit: cover;
-            margin-bottom: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3); /* Hafif neon parlama */
+            padding: 4px;
+            background: rgba(255,255,255,0.05);
         }
 
-        .profile-img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.6);
-        }
-
+        /* İsim ve Ünvan */
         h1 {
-            font-size: 1.8rem;
-            margin: 10px 0 5px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #ffffff;
+            letter-spacing: -0.5px;
         }
 
-        p {
-            color: #ddd;
-            margin-bottom: 30px;
+        .title {
+            color: var(--primary-color);
             font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .school {
+            color: #8892b0;
+            font-size: 0.9rem;
+            margin-bottom: 35px;
             font-weight: 300;
         }
 
-        /* BUTON TASARIMI */
+        /* Butonlar */
+        .links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
         .btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.3); /* Daha koyu buton arka planı */
-            color: white;
+            padding: 16px;
+            border-radius: 12px;
             text-decoration: none;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
         }
 
         .btn:hover {
-            background: #00d2ff; /* Hover olunca neon mavi */
-            color: #000;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4);
-            font-weight: bold;
-            border-color: transparent;
+            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateX(5px); /* Sağa hafif kayma efekti */
         }
 
-        .icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
+        /* LinkedIn Pasif Buton Stili */
+        .btn.soon {
+            background: transparent;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            color: #666;
+            cursor: default;
+        }
+        .btn.soon:hover {
+            transform: none;
+            background: transparent;
+            border-color: #888;
+            color: #888;
         }
 
-        /* Alt kısım */
+        .icon { margin-right: 12px; font-size: 1.1rem; }
+
+        /* Footer */
         .footer {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 0.75rem;
-            color: #ffffff70;
+            color: #555;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
         }
     </style>
 </head>
 <body>
 
-    <div class="glass-card">
-        <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Abdulkadir Turan">
+    <div class="card">
+        <div class="profile-wrapper">
+            <!-- Profil Resmi -->
+            <img src="https://github.com/TuranAbdulkadir.png" class="profile-img" alt="Abdulkadir Turan">
+        </div>
         
         <h1>Abdulkadir Turan</h1>
-        <p>Bilgisayar Programcılığı Öğrencisi 🚀</p>
+        <span class="title">Bilgisayar Programcılığı</span>
+        <p class="school">Çukurova Üniversitesi 🎓</p>
 
-        <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">
-            <span class="icon">💻</span> GitHub Profilim
-        </a>
-        
-        <a href="mailto:abdulkadirturan524@gmail.com" class="btn">
-            <span class="icon">✉️</span> Bana E-Posta At
-        </a>
-        
-        <a href="https://www.linkedin.com/" class="btn" target="_blank">
-            <span class="icon">👔</span> LinkedIn Hesabım
-        </a>
+        <div class="links">
+            <!-- GitHub Butonu -->
+            <a href="https://github.com/TuranAbdulkadir" class="btn" target="_blank">
+                <span class="icon">💻</span> GitHub Profilim
+            </a>
+            
+            <!-- Email Butonu -->
+            <a href="mailto:abdulkadirturan524@gmail.com" class="btn">
+                <span class="icon">✉️</span> İletişime Geç
+            </a>
+            
+            <!-- LinkedIn (Pasif/Yakında) -->
+            <!-- href="#" tıklandığında bir yere gitmemesini sağlar -->
+            <a href="#" class="btn soon">
+                <span class="icon">🔒</span> LinkedIn (Yakında)
+            </a>
+        </div>
 
         <div class="footer">
-            © 2025 Abdulkadir Turan - Kodlama & Tasarım
+            © 2025 Abdulkadir Turan<br>Designed for Future
         </div>
     </div>
 
