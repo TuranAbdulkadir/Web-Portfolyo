@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdulkadir Turan | Portfolyo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <title>Abdulkadir Turan | Software Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Calibre:wght@300;400;500;600&family=SF+Mono:wght@400&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     
     <style>
-        /* --- TEMEL AYARLAR --- */
+        /* --- RESET & DEĞİŞKENLER --- */
         :root {
-            --bg-color: #0a192f; /* Koyu Lacivert Taban */
-            --text-primary: #ccd6f6;
-            --text-secondary: #8892b0;
-            --accent: #64ffda; /* Neon Yeşil/Mavi */
+            --dark-navy: #020c1b;
+            --navy: #0a192f;
+            --light-navy: #112240;
+            --lightest-navy: #233554;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --white: #e6f1ff;
+            --green: #64ffda; /* Neon Accent */
+            --font-main: 'Calibre', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+            --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -21,294 +27,431 @@
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-primary);
+            background-color: var(--navy);
+            color: var(--slate);
+            font-family: var(--font-main);
+            font-size: 20px;
+            line-height: 1.3;
             overflow-x: hidden;
-            line-height: 1.6;
-            position: relative;
         }
 
-        /* --- EN GELİŞMİŞ SİBER ARKA PLAN ANİMASYONU --- */
-        .cyber-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -2;
-            background-color: var(--bg-color);
-            /* Dijital Izgara ve Enerji Dalgaları */
-            background-image: 
-                linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)),
-                linear-gradient(90deg, rgba(100, 255, 218, 0.03) 1px, transparent 1px),
-                linear-gradient(rgba(100, 255, 218, 0.03) 1px, transparent 1px),
-                radial-gradient(circle at 20% 30%, rgba(0, 210, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(100, 255, 218, 0.2) 0%, transparent 50%);
-            background-size: 100% 100%, 40px 40px, 40px 40px, 100% 100%, 100% 100%;
-            animation: moveCyberSpace 20s linear infinite alternate;
+        /* --- ÖZEL SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: var(--navy); }
+        ::-webkit-scrollbar-thumb { background-color: var(--lightest-navy); border: 3px solid var(--navy); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background-color: var(--green); }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--dark-navy);
+            z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-content { font-family: var(--font-mono); color: var(--green); font-size: 2rem; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.5; } }
+
+        /* --- CANVAS ARKA PLAN --- */
+        #canvas-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
         }
 
-        /* Arka planı yavaşça hareket ettiren animasyon */
-        @keyframes moveCyberSpace {
-            0% { background-position: 0 0, 0 0, 0 0, 0% 0%, 0% 0%; filter: hue-rotate(0deg); }
-            100% { background-position: 50px 50px, 40px 40px, 40px 40px, 10% 10%, -10% -10%; filter: hue-rotate(20deg); }
-        }
-
-        /* --- NAVBAR (MENÜ - Logo Silindi, Ortalatıldı) --- */
+        /* --- NAVBAR --- */
         nav {
-            position: fixed;
-            top: 0; width: 100%;
-            padding: 20px 50px;
-            background: rgba(10, 25, 47, 0.85); /* Daha şeffaf */
-            backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: center; /* Menüyü ortala */
-            align-items: center;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(100, 255, 218, 0.05);
+            position: fixed; top: 0; width: 100%; padding: 20px 50px;
+            background: rgba(10, 25, 47, 0.85); backdrop-filter: blur(10px);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 100; box-shadow: 0 10px 30px -10px rgba(2,12,27,0.7);
+            transition: top 0.3s;
         }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            gap: 40px; /* Boşluk arttırıldı */
+        .nav-list { display: flex; gap: 40px; list-style: none; }
+        .nav-link {
+            color: var(--white); font-family: var(--font-mono); font-size: 13px; text-decoration: none;
+            transition: 0.3s; display: flex; align-items: center;
         }
+        .nav-link span { color: var(--green); margin-right: 5px; }
+        .nav-link:hover { color: var(--green); transform: translateY(-3px); }
 
-        .nav-links a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-family: 'Fira Code', monospace;
-            transition: 0.3s;
-            position: relative;
+        /* --- SIDEBARS (YAN BARLAR) --- */
+        .side-element {
+            position: fixed; bottom: 0; width: 40px; z-index: 10;
+            display: flex; flex-direction: column; align-items: center;
         }
-
-        /* Menü altı çizgi efekti */
-        .nav-links a::after {
-            content: ''; display: block; width: 0; height: 2px; background: var(--accent); transition: width 0.3s;
-            position: absolute; bottom: -5px; left: 0;
+        .side-left { left: 40px; }
+        .side-right { right: 40px; }
+        
+        .social-link { color: var(--light-slate); font-size: 20px; margin-bottom: 20px; transition: 0.3s; text-decoration: none;}
+        .social-link:hover { color: var(--green); transform: translateY(-3px); }
+        
+        .email-link {
+            font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em;
+            writing-mode: vertical-rl; color: var(--light-slate); text-decoration: none;
+            margin-bottom: 20px; transition: 0.3s;
         }
-        .nav-links a:hover::after { width: 100%; }
-        .nav-links a span { color: var(--accent); margin-right: 5px; }
+        .email-link:hover { color: var(--green); transform: translateY(-3px); }
+        
+        .line { width: 1px; height: 90px; background-color: var(--light-slate); }
 
-        /* --- HERO BÖLÜMÜ --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 100px 10% 0;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* --- ANA İÇERİK YAPISI --- */
+        main { padding: 0 150px; max-width: 1600px; margin: 0 auto; }
+        section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 100px 0; }
+
+        /* --- HERO --- */
+        .hero h5 { color: var(--green); font-family: var(--font-mono); font-size: 16px; margin-bottom: 20px; margin-left: 2px;}
+        .hero h1 { font-size: 80px; font-weight: 600; color: var(--light-slate); line-height: 1.1; margin-bottom: 10px; }
+        .hero h1.name { color: var(--white); }
+        .hero p { max-width: 540px; margin-top: 20px; font-size: 18px; }
+        
+        .btn-hero {
+            color: var(--green); background-color: transparent; border: 1px solid var(--green);
+            border-radius: 4px; padding: 1.25rem 1.75rem; font-size: 14px; font-family: var(--font-mono);
+            line-height: 1; text-decoration: none; cursor: pointer; transition: 0.25s; margin-top: 50px; display: inline-block;
         }
+        .btn-hero:hover { background-color: rgba(100, 255, 218, 0.1); transform: translate(-4px, -4px); box-shadow: 4px 4px 0 0 var(--green); }
 
-        .hero h3 { color: var(--accent); font-family: 'Fira Code', monospace; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 1px;}
-        .hero h1 { font-size: 4.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 10px; color: #e6f1ff; text-shadow: 0 0 20px rgba(100, 255, 218, 0.1); }
-        .hero h2 { font-size: 3rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 30px; }
-        .hero p { max-width: 540px; color: var(--text-secondary); margin-bottom: 50px; font-size: 1.1rem; }
+        /* --- SCROLL REVEAL ANIMATION --- */
+        .hidden { opacity: 0; filter: blur(5px); transform: translateY(20px); transition: all 1s; }
+        .show { opacity: 1; filter: blur(0); transform: translateY(0); }
 
-        .type-cursor { display: inline-block; width: 3px; background-color: var(--accent); animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
-
-        .btn-main {
-            padding: 18px 40px;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-            background: transparent;
-            text-decoration: none;
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(100, 255, 218, 0.1);
+        /* --- BÖLÜM BAŞLIKLARI --- */
+        .section-heading {
+            display: flex; align-items: center; width: 100%; white-space: nowrap;
+            font-size: 32px; color: var(--white); font-weight: 600; margin-bottom: 40px;
         }
-        .btn-main:hover { background: rgba(100, 255, 218, 0.15); transform: translateY(-5px); box-shadow: 0 0 30px rgba(100, 255, 218, 0.3); }
+        .section-heading span { font-family: var(--font-mono); color: var(--green); font-size: 24px; margin-right: 10px; }
+        .section-heading::after { content: ""; display: block; width: 300px; height: 1px; background-color: var(--lightest-navy); margin-left: 20px; }
 
-        /* --- BÖLÜM GENEL STİLİ --- */
-        section { padding: 120px 10%; max-width: 1200px; margin: 0 auto; }
-        .section-title { display: flex; align-items: center; font-size: 2rem; font-weight: 700; margin-bottom: 50px; color: #e6f1ff; }
-        .section-title span { font-family: 'Fira Code', monospace; color: var(--accent); font-size: 1.5rem; margin-right: 10px; }
-        .section-title::after { content: ""; display: block; width: 300px; height: 1px; background: rgba(136, 146, 176, 0.3); margin-left: 20px; }
+        /* --- ABOUT --- */
+        .about-inner { display: grid; grid-template-columns: 3fr 2fr; gap: 50px; }
+        .skill-list {
+            display: grid; grid-template-columns: repeat(2, minmax(140px, 200px)); gap: 0 10px;
+            padding: 0; margin: 20px 0 0 0; list-style: none;
+        }
+        .skill-list li {
+            position: relative; margin-bottom: 10px; padding-left: 20px;
+            font-family: var(--font-mono); font-size: 13px;
+        }
+        .skill-list li::before { content: "▹"; position: absolute; left: 0; color: var(--green); }
+        
+        .photo-wrapper { position: relative; max-width: 300px; }
+        .photo-wrapper img { width: 100%; border-radius: 4px; filter: grayscale(100%) contrast(1); transition: 0.3s; position: relative; z-index: 10; }
+        .photo-wrapper::after {
+            content: ""; display: block; position: absolute; width: 100%; height: 100%;
+            border-radius: 4px; border: 2px solid var(--green); top: 20px; left: 20px; z-index: 1; transition: 0.3s;
+        }
+        .photo-wrapper:hover img { filter: none; transform: translate(-10px, -10px); }
+        .photo-wrapper:hover::after { transform: translate(10px, 10px); }
 
-        /* --- HAKKIMDA --- */
-        .about-content { display: grid; grid-template-columns: 3fr 2fr; gap: 50px; align-items: center; }
-        .about-text p { margin-bottom: 15px; color: var(--text-secondary); }
-        .skills-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; list-style: none; margin-top: 20px; font-family: 'Fira Code', monospace; font-size: 0.9rem; }
-        .skills-list li::before { content: "▹"; color: var(--accent); margin-right: 10px; }
-        .about-img-wrapper { position: relative; z-index: 1; }
-        .about-img-wrapper::after { content: ''; position: absolute; top: 20px; left: 20px; width: 100%; height: 100%; border: 3px solid var(--accent); z-index: -1; transition: 0.3s; border-radius: 4px; }
-        .about-img { width: 100%; border-radius: 4px; filter: grayscale(100%) contrast(1.1); transition: 0.3s; position: relative; z-index: 2; }
-        .about-img-wrapper:hover .about-img { filter: none; transform: translate(-10px, -10px); }
-        .about-img-wrapper:hover::after { transform: translate(10px, 10px); }
+        /* --- PROJECTS --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+        .project-card {
+            background-color: var(--light-navy); padding: 2rem 1.75rem; border-radius: 4px;
+            transition: 0.25s; height: 100%; display: flex; flex-direction: column;
+        }
+        .project-card:hover { transform: translateY(-7px); }
+        .project-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .folder { color: var(--green); font-size: 40px; }
+        .project-links a { color: var(--light-slate); margin-left: 10px; font-size: 20px; text-decoration: none; transition: 0.3s;}
+        .project-links a:hover { color: var(--green); }
+        .project-card h3 { color: var(--white); font-size: 22px; margin-bottom: 10px; }
+        .project-card p { font-size: 17px; flex-grow: 1; }
+        .project-tech-list { display: flex; margin-top: 20px; font-family: var(--font-mono); font-size: 12px; color: var(--slate); gap: 15px; }
 
-        /* --- PROJELER --- */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .project-card { background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(5px); padding: 35px; border-radius: 8px; transition: 0.3s; position: relative; top: 0; border: 1px solid transparent; }
-        .project-card:hover { top: -15px; border-color: var(--accent); box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.7); }
-        .folder-icon { color: var(--accent); font-size: 45px; margin-bottom: 25px; display: block; }
-        .project-card h3 { color: #e6f1ff; margin-bottom: 10px; font-size: 1.5rem; }
-        .project-card p { color: var(--text-secondary); font-size: 1rem; margin-bottom: 25px; }
-        .project-tech { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-secondary); display: flex; gap: 15px; margin-bottom: 25px; }
-        .project-link { color: var(--text-primary); text-decoration: none; font-size: 1.3rem; transition: 0.3s; }
-        .project-link:hover { color: var(--accent); }
-
-        /* --- İLETİŞİM --- */
-        .contact { text-align: center; max-width: 600px; margin: 0 auto; padding-bottom: 150px; }
-        .contact h3 { color: var(--accent); font-family: 'Fira Code', monospace; margin-bottom: 20px; }
-        .contact h2 { font-size: 3.5rem; margin-bottom: 25px; color: #e6f1ff; font-weight: 800; }
-        .contact p { color: var(--text-secondary); margin-bottom: 50px; font-size: 1.2rem; }
+        /* --- CONTACT --- */
+        .contact-section { text-align: center; max-width: 600px; margin: 0 auto; padding: 100px 0; }
+        .contact-section h2 { font-size: 50px; color: var(--white); margin-bottom: 20px; font-weight: 600; }
+        .contact-section p { font-size: 20px; margin-bottom: 50px; }
 
         /* --- FOOTER --- */
-        footer { text-align: center; padding: 30px; font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--text-secondary); }
+        footer { padding: 20px; text-align: center; font-family: var(--font-mono); font-size: 12px; }
 
         /* --- MOBİL UYUM --- */
         @media (max-width: 768px) {
-            .hero { padding-top: 150px; align-items: center; text-align: center; }
-            .hero h1 { font-size: 3rem; } .hero h2 { font-size: 2rem; }
-            .about-content { grid-template-columns: 1fr; }
-            .about-img-wrapper { margin: 50px auto 0; max-width: 300px; }
-            .nav-links { display: none; } /* Mobilde menüyü gizle */
-            section { padding: 80px 20px; }
-            .section-title::after { width: 100px; }
+            main { padding: 0 25px; }
+            .side-element { display: none; }
+            .about-inner { display: block; }
+            .photo-wrapper { margin: 50px auto 0; }
+            .nav-list { display: none; }
+            .hero h1 { font-size: 40px; }
         }
+
     </style>
 </head>
 <body>
 
-    <div class="cyber-bg"></div>
+    <div id="preloader">
+        <div class="loader-content">&lt;AT /&gt; Loading...</div>
+    </div>
+
+    <canvas id="canvas-bg"></canvas>
 
     <nav>
-        <ul class="nav-links">
-            <li><a href="#about"><span>01.</span> Hakkımda</a></li>
-            <li><a href="#projects"><span>02.</span> Projeler</a></li>
-            <li><a href="#contact"><span>03.</span> İletişim</a></li>
+        <ul class="nav-list">
+            <li><a href="#about" class="nav-link"><span>01.</span> Hakkımda</a></li>
+            <li><a href="#projects" class="nav-link"><span>02.</span> Projeler</a></li>
+            <li><a href="#contact" class="nav-link"><span>03.</span> İletişim</a></li>
         </ul>
     </nav>
 
-    <section class="hero">
-        <h3>Merhaba, benim adım</h3>
-        <h1>Abdulkadir Turan.</h1>
-        <h2><span id="typewriter"></span><span class="type-cursor">|</span></h2>
-        <p>
-            Çukurova Üniversitesi'nde Bilgisayar Programcılığı öğrencisiyim. 
-            Dijital dünyada iz bırakan otomasyonlar ve modern web deneyimleri tasarlıyorum.
-        </p>
-        <a href="#projects" class="btn-main">Projelerimi İncele</a>
-    </section>
+    <div class="side-element side-left">
+        <a href="https://github.com/TuranAbdulkadir" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+        <div class="line"></div>
+    </div>
 
-    <section id="about">
-        <h2 class="section-title"><span>01.</span> Hakkımda</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>Merhaba! Ben Abdulkadir, kodun gücüyle problemleri çözmeyi seven bir geliştiriciyim. Programlama maceram <strong>algoritma mantığını</strong> kavramakla başladı ve şu an modern teknolojilerle sağlam temeller üzerine inşa ediyorum.</p>
-                <p>Şu anda <strong>Çukurova Üniversitesi</strong>'nde eğitimime devam ederken, arka planda çalışan güçlü sistemler (backend) ve hayatı kolaylaştıran otomasyonlar üzerine odaklanıyorum.</p>
-                <p>Aktif olarak kullandığım teknolojiler:</p>
-                <ul class="skills-list">
-                    <li>Python (3.x)</li>
-                    <li>Modern HTML & CSS</li>
-                    <li>Git & GitHub</li>
-                    <li>VS Code Workflows</li>
-                    <li>System Automation</li>
-                    <li>Algorithmic Problem Solving</li>
-                </ul>
-            </div>
-            <div class="about-img-wrapper">
-                <img src="https://github.com/TuranAbdulkadir.png" class="about-img" alt="Profil">
-            </div>
-        </div>
-    </section>
+    <div class="side-element side-right">
+        <a href="mailto:abdulkadirturan524@gmail.com" class="email-link">abdulkadirturan524@gmail.com</a>
+        <div class="line"></div>
+    </div>
 
-    <section id="projects">
-        <h2 class="section-title"><span>02.</span> Neler Yaptım?</h2>
-        <div class="projects-grid">
-            
-            <div class="project-card">
-                <span class="folder-icon">📁</span>
-                <h3>Dosya Düzenleyici</h3>
-                <p>Masaüstündeki karmaşaya son veren bir Python otomasyonu. Dosyaları türlerine göre (Resim, Video, Belge) analiz eder ve saniyeler içinde ilgili klasörlere yerleştirir.</p>
-                <div class="project-tech">
-                    <span>Python</span>
-                    <span>OS Module</span>
-                    <span>Automation</span>
+    <main>
+        <section class="hero hidden">
+            <h5>Merhaba, benim adım</h5>
+            <h1 class="name">Abdulkadir Turan.</h1>
+            <h1>Dijital şeyler inşa ediyorum.</h1>
+            <p>
+                Çukurova Üniversitesi'nde Bilgisayar Programcılığı öğrencisiyim. 
+                Web teknolojileri, otomasyon sistemleri ve modern arayüzler tasarlamak üzerine uzmanlaşıyorum.
+            </p>
+            <a href="#projects" class="btn-hero">Projelerimi Gör!</a>
+        </section>
+
+        <section id="about" class="hidden">
+            <h2 class="section-heading"><span>01.</span> Hakkımda</h2>
+            <div class="about-inner">
+                <div class="about-text">
+                    <p>
+                        Merhaba! Ben Abdulkadir. Bilgisayarların nasıl çalıştığına olan merakım beni <strong>QBasic</strong> ile tanıştırdı ve o günden beri kod yazmak benim için bir tutku.
+                    </p>
+                    <p>
+                        Şu anda <strong>Çukurova Üniversitesi</strong>'nde öğrenciyim ve her gün yeni bir teknoloji öğrenerek yeteneklerimi geliştiriyorum. Disiplinli kodlama yapısını ve temiz mimariyi önemsiyorum.
+                    </p>
+                    <p>Yakın zamanda çalıştığım teknolojiler:</p>
+                    <ul class="skill-list">
+                        <li>Python (3.x)</li>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Git & GitHub</li>
+                        <li>Otomasyon</li>
+                        <li>Algoritmalar</li>
+                    </ul>
                 </div>
-                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link" target="_blank">📂 İncele</a>
-            </div>
-
-            <div class="project-card">
-                <span class="folder-icon">📘</span>
-                <h3>Algoritma Arşivi (QBasic)</h3>
-                <p>Programlamanın temeli olan algoritma mantığını kavramak için geliştirdiğim, matematiksel hesaplamalar ve döngü yapıları içeren kapsamlı kod kütüphanesi.</p>
-                <div class="project-tech">
-                    <span>Logic Building</span>
-                    <span>Algorithms</span>
-                    <span>Legacy Code</span>
+                <div class="photo-wrapper">
+                    <img src="https://github.com/TuranAbdulkadir.png" alt="Profil">
                 </div>
-                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link" target="_blank">📂 İncele</a>
             </div>
+        </section>
 
-            <div class="project-card">
-                <span class="folder-icon">🧮</span>
-                <h3>Akıllı Hesap Makinesi</h3>
-                <p>Kullanıcı hatalarını öngören, Try-Except bloklarıyla güçlendirilmiş, sağlam ve hatasız çalışan bir komut satırı hesap makinesi uygulaması.</p>
-                <div class="project-tech">
-                    <span>Python</span>
-                    <span>Error Handling</span>
-                    <span>CLI Tool</span>
+        <section id="projects" class="hidden">
+            <h2 class="section-heading"><span>02.</span> Neler Yaptım?</h2>
+            <div class="projects-grid">
+                
+                <div class="project-card">
+                    <div class="project-top">
+                        <i class="far fa-folder folder"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/TuranAbdulkadir" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3>Dosya Düzenleyici</h3>
+                    <p>Masaüstü karmaşasını çözen Python otomasyonu. Dosyaları uzantılarına göre analiz edip ilgili klasörlere taşır.</p>
+                    <ul class="project-tech-list">
+                        <li>Python</li>
+                        <li>OS</li>
+                        <li>Shutil</li>
+                    </ul>
                 </div>
-                <a href="https://github.com/TuranAbdulkadir?tab=repositories" class="project-link" target="_blank">📂 İncele</a>
-            </div>
 
-             <div class="project-card">
-                <span class="folder-icon">🌐</span>
-                <h3>Pro Web Portfolyo</h3>
-                <p>Kişisel markamı yansıtan, siber estetik temalı, tamamen responsive ve modern animasyonlarla güçlendirilmiş web sitesi.</p>
-                <div class="project-tech">
-                    <span>CSS3 Animations</span>
-                    <span>HTML5</span>
-                    <span>JavaScript</span>
+                <div class="project-card">
+                    <div class="project-top">
+                        <i class="far fa-folder folder"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/TuranAbdulkadir" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3>QBasic Algoritma</h3>
+                    <p>Matematiksel hesaplamalar ve döngü yapıları içeren, algoritma mantığını geliştiren kod arşivi.</p>
+                    <ul class="project-tech-list">
+                        <li>QBasic</li>
+                        <li>Logic</li>
+                        <li>Math</li>
+                    </ul>
                 </div>
-                <a href="#" class="project-link">📂 Canlıdasınız</a>
+
+                <div class="project-card">
+                    <div class="project-top">
+                        <i class="far fa-folder folder"></i>
+                        <div class="project-links">
+                            <a href="https://github.com/TuranAbdulkadir" target="_blank"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <h3>Hesap Makinesi</h3>
+                    <p>Hata yakalama özellikli, kullanıcı dostu komut satırı hesap makinesi uygulaması.</p>
+                    <ul class="project-tech-list">
+                        <li>Python</li>
+                        <li>CLI</li>
+                        <li>Try/Except</li>
+                    </ul>
+                </div>
+                
+                 <div class="project-card">
+                    <div class="project-top">
+                        <i class="far fa-folder folder"></i>
+                        <div class="project-links">
+                            <a href="#" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <h3>Portfolio V3</h3>
+                    <p>İnteraktif canvas arka planı ve scroll animasyonlarıyla güçlendirilmiş, şu an gezdiğiniz web sitesi.</p>
+                    <ul class="project-tech-list">
+                        <li>HTML5</li>
+                        <li>CSS3</li>
+                        <li>JS Canvas</li>
+                    </ul>
+                </div>
+
             </div>
+        </section>
 
-        </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <h3><span>03.</span> Sırada Ne Var?</h3>
-        <h2>İletişime Geç</h2>
-        <p>Yeni teknolojiler öğrenmeye, açık kaynak projelere katkı sunmaya ve ilginç fikirlere her zaman açığım. Bir sorun varsa veya sadece tanışmak istersen, gelen kutum sana açık.</p>
-        <a href="mailto:abdulkadirturan524@gmail.com" class="btn-main">Mail Gönder</a>
-    </section>
+        <section id="contact" class="hidden contact-section">
+            <p style="color: var(--green); font-family: var(--font-mono);">03. Sırada Ne Var?</p>
+            <h2>İletişime Geç</h2>
+            <p>
+                Şu an yeni projelere ve işbirliklerine açığım. İster bir sorunuz olsun ister sadece selam vermek isteyin, mail kutum her zaman açık!
+            </p>
+            <a href="mailto:abdulkadirturan524@gmail.com" class="btn-hero">Mail Gönder</a>
+        </section>
+    </main>
 
     <footer>
         <p>Designed & Built by Abdulkadir Turan</p>
-        <p>© 2025 | All rights reserved.</p>
     </footer>
 
     <script>
-        const textElement = document.getElementById("typewriter");
-        const texts = ["I build things for the web.", "Python Developer.", "Computer Programmer.", "Tech Enthusiast."];
-        let count = 0;
-        let index = 0;
-        let currentText = "";
-        let letter = "";
+        // --- PRELOADER ---
+        window.addEventListener("load", function() {
+            const preloader = document.getElementById("preloader");
+            preloader.style.opacity = "0";
+            setTimeout(() => { preloader.style.display = "none"; }, 500);
+        });
 
-        (function type() {
-            if (count === texts.length) {
-                count = 0;
-            }
-            currentText = texts[count];
-            letter = currentText.slice(0, ++index);
+        // --- SCROLL ANIMATION (Intersection Observer) ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
 
-            textElement.textContent = letter;
-            if (letter.length === currentText.length) {
-                setTimeout(() => {
-                    index = 0;
-                    count++;
-                }, 2000); 
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+
+        // --- CANVAS PARTICLE NETWORK ---
+        const canvas = document.getElementById("canvas-bg");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        // Fare konumu
+        let mouse = { x: null, y: null, radius: (canvas.height/80) * (canvas.width/80) }
+
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Parçacık Sınıfı
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y;
+                this.directionX = directionX; this.directionY = directionY;
+                this.size = size; this.color = color;
             }
-            setTimeout(type, 100);
-        })();
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#64ffda'; // Neon Yeşil
+                ctx.fill();
+            }
+            update() {
+                // Sınır kontrolü
+                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
+                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+
+                // Fare etkileşimi
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size) {
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) { this.x += 10; }
+                    if (mouse.x > this.x && this.x > this.size * 10) { this.x -= 10; }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) { this.y += 10; }
+                    if (mouse.y > this.y && this.y > this.size * 10) { this.y -= 10; }
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1; // Hız ayarı
+                let directionY = (Math.random() * 2) - 1;
+                let color = '#64ffda';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
+                                   ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(100, 255, 218,' + opacityValue + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('resize', function(){
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            mouse.radius = ((canvas.height/80) * (canvas.height/80));
+            init();
+        });
+
+        init();
+        animate();
+
     </script>
 
 </body>
