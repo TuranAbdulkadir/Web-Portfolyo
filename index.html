@@ -180,7 +180,46 @@
             .about-grid { grid-template-columns: 1fr; }
             .nav-links { display: none; }
             .cursor, .cursor-dot { display: none; } /* Mobilde cursor gizle */
+     
+     /* --- SONSUZ KAYAN ŞERİT (TECH SLIDER) --- */
+        .slider-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-top: 50px;
+            position: relative;
         }
+        
+        .slider-container::before, .slider-container::after {
+            content: ""; position: absolute; top: 0; width: 100px; height: 100%; z-index: 2;
+        }
+        .slider-container::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+        .slider-container::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+        .slider-track {
+            display: flex;
+            width: calc(200px * 14);
+            animation: scroll 20s linear infinite;
+        }
+
+        .slide {
+            width: 200px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem; font-weight: 600; color: var(--text-gray);
+            transition: 0.3s;
+        }
+        
+        .slide i { margin-right: 10px; color: var(--primary); font-size: 1.8rem; }
+        .slide:hover { color: var(--white); text-shadow: 0 0 10px var(--primary); transform: scale(1.1); }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-200px * 7)); }
+        }   }
     </style>
 </head>
 <body>
@@ -250,6 +289,25 @@
         </div>
     </section>
 
+    <div class="slider-container">
+        <div class="slider-track">
+            <div class="slide"><i class="fab fa-python"></i> Python</div>
+            <div class="slide"><i class="fas fa-code"></i> VS Code</div>
+            <div class="slide"><i class="fab fa-html5"></i> HTML5</div>
+            <div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div>
+            <div class="slide"><i class="fab fa-js"></i> JavaScript</div>
+            <div class="slide"><i class="fab fa-github"></i> GitHub</div>
+            <div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
+
+            <div class="slide"><i class="fab fa-python"></i> Python</div>
+            <div class="slide"><i class="fas fa-code"></i> VS Code</div>
+            <div class="slide"><i class="fab fa-html5"></i> HTML5</div>
+            <div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div>
+            <div class="slide"><i class="fab fa-js"></i> JavaScript</div>
+            <div class="slide"><i class="fab fa-github"></i> GitHub</div>
+            <div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
+        </div>
+    </div>
     <section id="projects" class="container">
         <h2 class="section-title">Seçilmiş Projeler</h2>
         <div class="projects-grid">
