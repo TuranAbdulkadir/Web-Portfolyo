@@ -8,6 +8,7 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- 1. TEMEL AYARLAR --- */
@@ -20,86 +21,74 @@
             --text: #ffffff;
             --text-gray: #a1a1aa;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; /* Özel mouse */ }
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
         html { scroll-behavior: smooth; }
-        body {
-            background-color: var(--bg); font-family: 'Space Grotesk', sans-serif;
-            color: var(--text); overflow-x: hidden;
+        body { background-color: var(--bg); font-family: 'Space Grotesk', sans-serif; color: var(--text); overflow-x: hidden; }
+
+        /* --- YENİ! SCROLL PROGRESS BAR --- */
+        #scroll-progress {
+            position: fixed; top: 0; left: 0; width: 0%; height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            z-index: 1000; transition: width 0.1s;
         }
 
-        /* --- 2. PRELOADER (YÜKLEME EKRANI) --- */
+        /* --- PRELOADER --- */
         #preloader {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 99999;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg);
+            z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
         .loader {
-            width: 50px; height: 50px; border: 3px solid var(--border);
-            border-top: 3px solid var(--primary); border-radius: 50%;
-            animation: spin 1s linear infinite;
+            width: 50px; height: 50px; border: 3px solid var(--border); border-top: 3px solid var(--primary);
+            border-radius: 50%; animation: spin 1s linear infinite;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- 3. ÖZEL MOUSE --- */
+        /* --- ÖZEL MOUSE --- */
         .cursor {
             width: 20px; height: 20px; border: 1px solid var(--primary); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); transition: transform 0.1s;
+            position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: transform 0.1s;
         }
         .cursor-dot {
             width: 4px; height: 4px; background: var(--secondary); border-radius: 50%;
             position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
         }
 
-        /* --- 4. ARKA PLAN --- */
+        /* --- ARKA PLAN & NAVBAR --- */
         #canvas-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.5; }
-
-        /* --- 5. NAVBAR & MOBİL MENÜ --- */
         nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 50px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; backdrop-filter: blur(15px); background: rgba(5,5,5,0.7);
+            position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 100; backdrop-filter: blur(15px); background: rgba(5,5,5,0.7);
             border-bottom: 1px solid var(--border);
         }
-        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; }
-        .logo span { color: var(--primary); }
-        
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: 2px; } .logo span { color: var(--primary); }
         .nav-links { display: flex; gap: 40px; list-style: none; }
         .nav-links a {
-            text-decoration: none; color: var(--text-gray); font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; position: relative;
+            text-decoration: none; color: var(--text-gray); font-size: 0.9rem; text-transform: uppercase;
+            letter-spacing: 1px; transition: 0.3s; position: relative;
         }
         .nav-links a:hover { color: var(--primary); }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
-            background: var(--primary); transition: 0.3s;
-        }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: var(--primary); transition: 0.3s; }
         .nav-links a:hover::after { width: 100%; }
-
-        /* Hamburger Menu Icon */
         .menu-toggle { display: none; font-size: 1.5rem; color: var(--text); cursor: none; }
 
-        /* --- 6. HERO BÖLÜMÜ --- */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center; padding: 0 20px;
-        }
+        /* --- HERO --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
         .glitch {
-            font-size: 4.5rem; font-weight: 800; color: var(--text);
-            text-shadow: 2px 2px var(--secondary), -2px -2px var(--primary);
+            font-size: 4.5rem; font-weight: 800; color: var(--text); text-shadow: 2px 2px var(--secondary), -2px -2px var(--primary);
             animation: shake 3s infinite alternate;
         }
-        @keyframes shake {
-            0% { transform: translate(0,0); } 2% { transform: translate(2px,0); }
-            4% { transform: translate(-2px,0); } 6% { transform: translate(0,0); }
-            100% { transform: translate(0,0); }
-        }
+        @keyframes shake { 0% { transform: translate(0,0); } 2% { transform: translate(2px,0); } 4% { transform: translate(-2px,0); } 6% { transform: translate(0,0); } 100% { transform: translate(0,0); } }
+        
+        /* YENİ! TYPEWRITER EFEKTİ İÇİN */
         .subtitle {
-            font-size: 1.2rem; color: var(--primary); letter-spacing: 4px;
-            text-transform: uppercase; margin: 20px 0 40px;
+            font-size: 1.2rem; color: var(--primary); letter-spacing: 4px; text-transform: uppercase;
+            margin: 20px 0 40px; min-height: 1.4em; /* Titremeyi önlemek için */
+            border-right: 2px solid var(--primary); /* İmleç efekti */
+            white-space: nowrap; overflow: hidden;
+            animation: blink-caret 0.75s step-end infinite;
         }
+        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--primary); } }
+
         .btn-cyber {
             padding: 15px 40px; border: 1px solid var(--primary); background: rgba(0, 243, 255, 0.1);
             color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
@@ -107,100 +96,90 @@
         }
         .btn-cyber:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
 
-        /* --- 7. SCROLL ANIMATION (GİZLEME) --- */
-        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s ease; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* --- 8. HAKKIMDA --- */
+        /* --- GENEL BÖLÜMLER --- */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 1s ease; } .reveal.active { opacity: 1; transform: translateY(0); }
         .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
-        .section-title { font-size: 3rem; margin-bottom: 60px; color: var(--text); text-align: center;}
-        .section-title span { color: var(--secondary); }
+        .section-title { font-size: 3rem; margin-bottom: 60px; color: var(--text); text-align: center;} .section-title span { color: var(--secondary); }
 
+        /* --- HAKKIMDA --- */
         .about-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 50px; align-items: start; }
         .profile-pic { width: 100%; border-radius: 20px; border: 2px solid var(--border); box-shadow: 0 0 20px rgba(0,243,255,0.2); }
-
         .tab-buttons { display: flex; gap: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .tab-btn {
-            background: none; border: none; color: var(--text-gray); font-size: 1.1rem;
-            padding-bottom: 10px; cursor: none; font-family: 'Space Grotesk'; transition: 0.3s;
-        }
-        .tab-btn:hover { color: var(--white); }
-        .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
-        
-        .tab-content { display: none; line-height: 1.8; color: var(--text-gray); animation: fadeIn 0.5s; }
-        .tab-content.active { display: block; }
-        .tab-content ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .tab-content li::before { content: '▹'; color: var(--secondary); margin-right: 10px; }
+        .tab-btn { background: none; border: none; color: var(--text-gray); font-size: 1.1rem; padding-bottom: 10px; cursor: none; font-family: 'Space Grotesk'; transition: 0.3s; }
+        .tab-btn:hover { color: var(--white); } .tab-btn.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .tab-content { display: none; line-height: 1.8; color: var(--text-gray); animation: fadeIn 0.5s; } .tab-content.active { display: block; }
+        .tab-content ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .tab-content li::before { content: '▹'; color: var(--secondary); margin-right: 10px; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- 9. SLIDER --- */
+        /* --- SLIDER --- */
         .slider-section { padding: 50px 0; overflow: hidden; background: rgba(255,255,255,0.02); margin: 50px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .slider-track { display: flex; width: calc(200px * 14); animation: scroll 20s linear infinite; }
         .slide { width: 200px; flex-shrink: 0; text-align: center; font-size: 1.5rem; color: var(--text-gray); font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .slide i { color: var(--primary); }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-200px * 7)); } }
 
-        /* --- 10. PROJELER --- */
+        /* --- PROJELER (GÜNCELLENDİ!) --- */
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 15px; padding: 30px;
-            transition: 0.3s; transform-style: preserve-3d; transform: perspective(1000px);
-        }
+        .card { background: var(--glass); border: 1px solid var(--border); border-radius: 15px; padding: 30px; transition: 0.3s; transform-style: preserve-3d; transform: perspective(1000px); }
         .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .folder-icon { font-size: 3rem; color: var(--secondary); margin-bottom: 20px; }
         .card h3 { font-size: 1.5rem; margin-bottom: 10px; color: #fff; }
         .card p { color: var(--text-gray); margin-bottom: 20px; font-size: 0.9rem; }
-        .tech-tag { color: var(--primary); font-size: 0.8rem; margin-right: 10px; font-family: monospace; background: rgba(0, 243, 255, 0.1); padding: 2px 8px; border-radius: 4px; }
+        
+        /* YENİ! İKONLU TECH TAGLER */
+        .tech-stack { display: flex; gap: 10px; flex-wrap: wrap; }
+        .tech-tag {
+            color: var(--primary); font-size: 0.8rem; font-family: monospace;
+            background: rgba(0, 243, 255, 0.1); padding: 4px 10px; border-radius: 4px;
+            display: flex; align-items: center; gap: 5px; border: 1px solid var(--primary);
+        }
+        .tech-tag i { font-size: 0.9rem; }
+
         .card-links { margin-top: 20px; }
         .card-links a { color: #fff; text-decoration: none; font-size: 1rem; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
         .card-links a:hover { color: var(--primary); }
 
-        /* --- 11. İLETİŞİM FORMU (YENİ!) --- */
-        .contact-container {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
-            background: var(--glass); padding: 50px; border-radius: 20px; border: 1px solid var(--border);
-        }
+        /* --- İLETİŞİM --- */
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; background: var(--glass); padding: 50px; border-radius: 20px; border: 1px solid var(--border); }
         .contact-info h3 { font-size: 2rem; margin-bottom: 20px; color: var(--white); }
         .contact-info p { color: var(--text-gray); margin-bottom: 30px; }
         .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; color: var(--white); }
         .contact-item i { color: var(--primary); font-size: 1.5rem; }
-
         .contact-form { display: flex; flex-direction: column; gap: 20px; }
-        .form-group input, .form-group textarea {
-            width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-            color: var(--white); font-family: 'Space Grotesk'; border-radius: 8px; outline: none; transition: 0.3s;
-        }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); color: var(--white); font-family: 'Space Grotesk'; border-radius: 8px; outline: none; transition: 0.3s; }
         .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
         .form-group textarea { height: 150px; resize: none; }
 
-        /* --- 12. FOOTER --- */
+        /* --- YENİ! BACK-TO-TOP BUTONU --- */
+        #back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: rgba(0, 243, 255, 0.1); border: 1px solid var(--primary); color: var(--primary);
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: none; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 999;
+        }
+        #back-to-top.show { opacity: 1; pointer-events: auto; }
+        #back-to-top:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary); }
+
         footer { text-align: center; padding: 50px 0; color: var(--text-gray); border-top: 1px solid var(--border); margin-top: 100px; }
 
-        /* --- MOBİL --- */
         @media (max-width: 768px) {
-            .glitch { font-size: 3rem; }
-            .about-grid, .contact-container { grid-template-columns: 1fr; }
-            .nav-links {
-                position: fixed; right: -100%; top: 70px; width: 50%; height: 100vh;
-                background: rgba(5,5,5,0.95); flex-direction: column; padding: 50px;
-                transition: 0.5s; backdrop-filter: blur(10px);
-            }
-            .nav-links.active { right: 0; }
-            .menu-toggle { display: block; }
-            .cursor, .cursor-dot { display: none; }
+            .glitch { font-size: 3rem; } .about-grid, .contact-container { grid-template-columns: 1fr; }
+            .nav-links { position: fixed; right: -100%; top: 70px; width: 50%; height: 100vh; background: rgba(5,5,5,0.95); flex-direction: column; padding: 50px; transition: 0.5s; backdrop-filter: blur(10px); }
+            .nav-links.active { right: 0; } .menu-toggle { display: block; } .cursor, .cursor-dot { display: none; }
         }
     </style>
 </head>
 <body>
 
-    <div id="preloader">
-        <div class="loader"></div>
-    </div>
+    <div id="scroll-progress"></div>
 
-    <div class="cursor"></div>
-    <div class="cursor-dot"></div>
+    <div id="preloader"><div class="loader"></div></div>
+
+    <div class="cursor"></div><div class="cursor-dot"></div>
 
     <div id="canvas-container"></div>
+
+    <div id="back-to-top"><i class="fas fa-chevron-up"></i></div>
 
     <nav>
         <div class="logo">ABDULKADIR<span>.DEV</span></div>
@@ -214,7 +193,7 @@
 
     <section class="hero reveal">
         <div class="glitch">ABDULKADIR TURAN</div>
-        <div class="subtitle">Creative Developer & Python Expert</div>
+        <div class="subtitle"></div>
         <a href="#projects" class="btn-cyber">Keşfet</a>
     </section>
 
@@ -227,27 +206,20 @@
                     <img src="https://github-readme-stats.vercel.app/api?username=TuranAbdulkadir&show_icons=true&theme=dark&bg_color=00000000&hide_border=true&title_color=00f3ff&icon_color=bc13fe" style="width:100%">
                 </div>
             </div>
-            
             <div class="about-info">
                 <div class="tab-buttons">
                     <button class="tab-btn active" onclick="openTab('bio')">Biyografi</button>
                     <button class="tab-btn" onclick="openTab('skills')">Yetenekler</button>
                 </div>
-
                 <div id="bio" class="tab-content active">
-                    <p>Merhaba! Ben Abdulkadir. Çukurova Üniversitesi'nde Bilgisayar Programcılığı öğrencisiyim. Kodlama dünyasına QBasic ile adım attım ve şu an modern teknolojilerle profesyonel çözümler üretiyorum.</p>
+                    <p>Merhaba! Ben Abdulkadir. Çukurova Üniversitesi'nde Bilgisayar Programcılığı öğrencisiyim. Kodlama dünyasına QBasic ile adım attım, şu an modern teknolojilerle profesyonel çözümler üretiyorum.</p>
                     <br>
                     <p>Sıradan kod yazmak yerine, kullanıcı deneyimini en üst düzeye çıkaran, görsel olarak etkileyici ve arka planda güçlü çalışan sistemler kurmayı hedefliyorum.</p>
                 </div>
-
                 <div id="skills" class="tab-content">
                     <ul>
-                        <li>Python (Advanced)</li>
-                        <li>HTML5 & CSS3</li>
-                        <li>JavaScript</li>
-                        <li>Git & GitHub</li>
-                        <li>Otomasyon</li>
-                        <li>Algoritmalar</li>
+                        <li>Python (Advanced)</li><li>HTML5 & CSS3</li><li>JavaScript</li>
+                        <li>Git & GitHub</li><li>Otomasyon</li><li>Algoritmalar</li>
                     </ul>
                 </div>
             </div>
@@ -256,66 +228,53 @@
 
     <div class="slider-section">
         <div class="slider-track">
-            <div class="slide"><i class="fab fa-python"></i> Python</div>
-            <div class="slide"><i class="fas fa-code"></i> VS Code</div>
-            <div class="slide"><i class="fab fa-html5"></i> HTML5</div>
-            <div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div>
-            <div class="slide"><i class="fab fa-js"></i> JavaScript</div>
-            <div class="slide"><i class="fab fa-github"></i> GitHub</div>
-            <div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
-            <div class="slide"><i class="fab fa-python"></i> Python</div>
-            <div class="slide"><i class="fas fa-code"></i> VS Code</div>
-            <div class="slide"><i class="fab fa-html5"></i> HTML5</div>
-            <div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div>
-            <div class="slide"><i class="fab fa-js"></i> JavaScript</div>
-            <div class="slide"><i class="fab fa-github"></i> GitHub</div>
-            <div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
+            <div class="slide"><i class="fab fa-python"></i> Python</div><div class="slide"><i class="fas fa-code"></i> VS Code</div><div class="slide"><i class="fab fa-html5"></i> HTML5</div><div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div><div class="slide"><i class="fab fa-js"></i> JavaScript</div><div class="slide"><i class="fab fa-github"></i> GitHub</div><div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
+            <div class="slide"><i class="fab fa-python"></i> Python</div><div class="slide"><i class="fas fa-code"></i> VS Code</div><div class="slide"><i class="fab fa-html5"></i> HTML5</div><div class="slide"><i class="fab fa-css3-alt"></i> CSS3</div><div class="slide"><i class="fab fa-js"></i> JavaScript</div><div class="slide"><i class="fab fa-github"></i> GitHub</div><div class="slide"><i class="fas fa-terminal"></i> Terminal</div>
         </div>
     </div>
 
     <section id="projects" class="container reveal">
         <h2 class="section-title">Projelerim<span>.</span></h2>
         <div class="projects-grid">
-            
             <div class="card" data-tilt>
                 <div class="folder-icon"><i class="fas fa-box-open"></i></div>
                 <h3>Python Mega Pack (20+ Proje)</h3>
                 <p>Dev Python Arşivi: Hava Durumu, PDF Birleştirici, BMI, Şifre Analizi ve daha fazlası.</p>
                 <div class="tech-stack">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Automation</span>
+                    <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
+                    <span class="tech-tag"><i class="fas fa-robot"></i> Automation</span>
+                    <span class="tech-tag"><i class="fas fa-cubes"></i> 20+ Apps</span>
                 </div>
                 <div class="card-links">
                     <a href="https://github.com/TuranAbdulkadir/Python-Mini-Projects-V2" target="_blank"><i class="fab fa-github"></i> Kodu İncele</a>
                 </div>
             </div>
-
             <div class="card" data-tilt>
                 <div class="folder-icon"><i class="fas fa-laptop-code"></i></div>
                 <h3>QBasic Algoritmalar</h3>
                 <p>Algoritma mantığını kavramak için geliştirdiğim matematiksel ve döngüsel kod arşivi.</p>
                 <div class="tech-stack">
-                    <span class="tech-tag">Logic</span>
-                    <span class="tech-tag">Math</span>
+                    <span class="tech-tag"><i class="fas fa-code"></i> QBasic</span>
+                    <span class="tech-tag"><i class="fas fa-brain"></i> Logic</span>
+                    <span class="tech-tag"><i class="fas fa-square-root-alt"></i> Math</span>
                 </div>
                 <div class="card-links">
                     <a href="https://github.com/TuranAbdulkadir?tab=repositories" target="_blank"><i class="fab fa-github"></i> Kodu İncele</a>
                 </div>
             </div>
-
             <div class="card" data-tilt>
                 <div class="folder-icon"><i class="fas fa-globe"></i></div>
                 <h3>Ultimate Portfolio</h3>
                 <p>Şu an gezdiğiniz site. Three.js, 3D Tilt efektleri ve modern CSS teknikleri ile tasarlandı.</p>
                 <div class="tech-stack">
-                    <span class="tech-tag">Three.js</span>
-                    <span class="tech-tag">Cyberpunk</span>
+                    <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                    <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                    <span class="tech-tag"><i class="fab fa-js"></i> Three.js</span>
                 </div>
                 <div class="card-links">
                     <a href="#"><i class="fas fa-link"></i> Canlıdasınız</a>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -324,108 +283,97 @@
         <div class="contact-container">
             <div class="contact-info">
                 <h3>Birlikte Çalışalım!</h3>
-                <p>Yeni bir proje fikrin mi var? Yoksa sadece merhaba mı demek istiyorsun? Aşağıdaki formu doldur, en kısa sürede dönüş yapayım.</p>
+                <p>Yeni bir proje fikrin mi var? Aşağıdaki formu doldur, en kısa sürede dönüş yapayım.</p>
                 <div class="contact-item"><i class="fas fa-envelope"></i> abdulkadirturan524@gmail.com</div>
                 <div class="contact-item"><i class="fas fa-map-marker-alt"></i> Adana, Türkiye</div>
             </div>
-            
             <form action="https://formspree.io/f/mdorbznk" method="POST" class="contact-form">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Adınız Soyadınız" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="E-Posta Adresiniz" required>
-                </div>
-                <div class="form-group">
-                    <textarea name="message" placeholder="Mesajınız..." required></textarea>
-                </div>
+                <div class="form-group"><input type="text" name="name" placeholder="Adınız Soyadınız" required></div>
+                <div class="form-group"><input type="email" name="email" placeholder="E-Posta Adresiniz" required></div>
+                <div class="form-group"><textarea name="message" placeholder="Mesajınız..." required></textarea></div>
                 <button type="submit" class="btn-cyber">GÖNDER</button>
             </form>
         </div>
     </section>
 
-    <footer>
-        <p>Designed & Built by Abdulkadir Turan © 2025</p>
-    </footer>
+    <footer><p>Designed & Built by Abdulkadir Turan © 2025</p></footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
 
     <script>
-        // 1. PRELOADER
-        window.addEventListener("load", () => {
-            document.getElementById("preloader").style.opacity = "0";
-            setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 500);
-        });
-
-        // 2. SCROLL REVEAL (KAYDIRMA EFEKTİ)
-        window.addEventListener('scroll', reveal);
-        function reveal(){
-            var reveals = document.querySelectorAll('.reveal');
-            for(var i = 0; i < reveals.length; i++){
-                var windowheight = window.innerHeight;
-                var revealtop = reveals[i].getBoundingClientRect().top;
-                var revealpoint = 150;
-                if(revealtop < windowheight - revealpoint){
-                    reveals[i].classList.add('active');
-                }
+        // YENİ! TYPEWRITER EFEKTİ
+        const subtitleText = "Creative Developer & Python Expert";
+        const subtitleElement = document.querySelector('.subtitle');
+        let i = 0;
+        function typeWriter() {
+            if (i < subtitleText.length) {
+                subtitleElement.textContent += subtitleText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100); // Yazma hızı (daha düşük = daha hızlı)
+            } else {
+                subtitleElement.style.borderRight = "none"; // Yazma bitince imleci kaldır
             }
         }
 
-        // 3. MOBIL MENU
-        function toggleMenu() {
-            document.querySelector('.nav-links').classList.toggle('active');
-        }
-
-        // 4. MOUSE
-        const cursor = document.querySelector('.cursor');
-        const dot = document.querySelector('.cursor-dot');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
-            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
+        // PRELOADER & BAŞLANGIÇ
+        window.addEventListener("load", () => {
+            document.getElementById("preloader").style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById("preloader").style.display = "none";
+                setTimeout(typeWriter, 500); // Preloader gittikten yarım saniye sonra yazmaya başla
+            }, 500);
         });
 
-        // 5. TABS
-        function openTab(name) {
-            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(name).style.display = 'block';
-            event.currentTarget.classList.add('active');
-        }
+        // YENİ! SCROLL PROGRESS & BACK-TO-TOP
+        const progressBar = document.getElementById('scroll-progress');
+        const backToTopBtn = document.getElementById('back-to-top');
 
-        // 6. THREE.JS STARFIELD
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        window.addEventListener('scroll', () => {
+            // Progress Bar
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            let scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = scrolled + "%";
+
+            // Back to Top Göster/Gizle
+            if (scrollTop > 500) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+            
+            reveal(); // Scroll reveal fonksiyonunu çağır
+        });
+
+        // Back to Top Tıklama
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // DİĞER FONKSİYONLAR (Reveal, Menu, Mouse, Tabs, ThreeJS, Tilt)
+        function reveal(){
+            var reveals = document.querySelectorAll('.reveal');
+            for(var i = 0; i < reveals.length; i++){
+                var windowheight = window.innerHeight; var revealtop = reveals[i].getBoundingClientRect().top; var revealpoint = 150;
+                if(revealtop < windowheight - revealpoint){ reveals[i].classList.add('active'); }
+            }
+        }
+        function toggleMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+        const cursor = document.querySelector('.cursor'); const dot = document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px'; });
+        function openTab(name) { document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none'); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(name).style.display = 'block'; event.currentTarget.classList.add('active'); }
+        const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true }); renderer.setSize(window.innerWidth, window.innerHeight);
         document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        for (let i = 0; i < 5000; i++) {
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-        }
+        const geometry = new THREE.BufferGeometry(); const vertices = [];
+        for (let i = 0; i < 5000; i++) { vertices.push(THREE.MathUtils.randFloatSpread(2000)); vertices.push(THREE.MathUtils.randFloatSpread(2000)); vertices.push(THREE.MathUtils.randFloatSpread(2000)); }
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
         const points = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x00f3ff, size: 0.7 }));
-        scene.add(points);
-        camera.position.z = 1000;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            points.rotation.x += 0.0005; points.rotation.y += 0.0005;
-            renderer.render(scene, camera);
-        }
+        scene.add(points); camera.position.z = 1000;
+        function animate() { requestAnimationFrame(animate); points.rotation.x += 0.0005; points.rotation.y += 0.0005; renderer.render(scene, camera); }
         animate();
-
-        window.addEventListener('resize', () => {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        });
-
-        // 7. TILT
+        window.addEventListener('resize', () => { renderer.setSize(window.innerWidth, window.innerHeight); camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); });
         VanillaTilt.init(document.querySelectorAll(".card"), { max: 15, speed: 400, glare: true, "max-glare": 0.2 });
     </script>
 </body>
