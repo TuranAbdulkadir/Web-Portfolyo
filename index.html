@@ -199,6 +199,80 @@
             .music-player { bottom: 10px; left: 10px; width: calc(100% - 20px); }
             .cursor, .cursor-dot { display: none; }
         }
+    /* --- YENİ EKLENEN: CUSTOM CONTEXT MENU (SAĞ TIK) --- */
+        .context-menu {
+            position: fixed;
+            z-index: 999999;
+            width: 200px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 10px 0;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transform: scale(0);
+            transform-origin: top left;
+            transition: transform 0.2s ease-out;
+            display: none; /* Başlangıçta gizli */
+        }
+        
+        .context-menu.visible {
+            transform: scale(1);
+            display: block;
+        }
+
+        .menu-item {
+            padding: 10px 20px;
+            color: var(--text);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-code);
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary);
+            padding-left: 25px; /* Hover'da sağa kayma efekti */
+        }
+        
+        .menu-item i { width: 20px; text-align: center; }
+        .menu-item.disabled { color: var(--text-gray); cursor: default; font-size: 0.7rem; pointer-events: none; }
+
+        /* --- YENİ EKLENEN: TOAST BİLDİRİMİ --- */
+        #toast-box {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 999999;
+        }
+
+        .toast {
+            background: rgba(5, 5, 5, 0.9);
+            border-left: 4px solid var(--primary);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 4px;
+            font-family: var(--font-code);
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease forwards, fadeOut 0.5s ease 3s forwards;
+            min-width: 250px;
+        }
+        
+        .toast i { color: var(--primary); }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
     </style>
 </head>
 <body>
@@ -496,6 +570,76 @@
                 terminalInput.focus();
             });
         }
+   // --- YENİ ÖZELLİK: SAĞ TIK MENÜSÜ ---
+        const contextMenu = document.getElementById("context-menu");
+        const scope = document.querySelector("body");
+
+        // Sağ tıklandığında menüyü aç
+        scope.addEventListener("contextmenu", (event) => {
+            event.preventDefault(); // Standart menüyü engelle
+            
+            const { clientX: mouseX, clientY: mouseY } = event;
+            
+            // Menü pozisyonunu ayarla
+            contextMenu.style.top = `${mouseY}px`;
+            contextMenu.style.left = `${mouseX}px`;
+            
+            // Menüyü göster
+            contextMenu.classList.remove("visible");
+            setTimeout(() => {
+                contextMenu.classList.add("visible");
+            });
+            
+            showToast("System Menu Accessed", "fa-terminal"); // Bildirim gönder
+        });
+
+        // Başka yere tıklayınca kapat
+        scope.addEventListener("click", (e) => {
+            if (e.target.offsetParent != contextMenu) {
+                contextMenu.classList.remove("visible");
+            }
+        });
+
+        // --- YENİ ÖZELLİK: BİLDİRİM SİSTEMİ (TOAST) ---
+        function showToast(message, icon = "fa-check-circle") {
+            const toastBox = document.getElementById("toast-box");
+            const toast = document.createElement("div");
+            toast.classList.add("toast");
+            toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            toastBox.appendChild(toast);
+
+            // 3.5 saniye sonra kutuyu DOM'dan sil
+            setTimeout(() => {
+                toast.remove();
+            }, 3500);
+        }
+
+        // Örnek: Mail kopyalandığında (İletişim kısmındaki mail yazısına tıklanınca)
+        const emailText = document.querySelector(".email-link"); // Eğer sınıf varsa
+        // Veya genel kopyalama eventi
+        document.addEventListener('copy', () => {
+            showToast("Kopyalandı! (Clipboard)", "fa-copy");
+        });
    </script>
+<div id="context-menu" class="context-menu">
+        <div class="menu-item" onclick="window.location.reload()">
+            <i class="fas fa-sync-alt"></i> Sistemi Yenile
+        </div>
+        <div class="menu-item" onclick="window.open('https://github.com/TuranAbdulkadir', '_blank')">
+            <i class="fab fa-github"></i> GitHub Profili
+        </div>
+        <div class="menu-item" onclick="window.location.href='#projects'">
+            <i class="fas fa-box-open"></i> Projeleri İncele
+        </div>
+        <div class="menu-item" onclick="window.location.href='#contact'">
+            <i class="fas fa-envelope"></i> Bana Ulaş
+        </div>
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 5px 0;">
+        <div class="menu-item disabled">
+            <i class="fas fa-terminal"></i> v10.2 System Active
+        </div>
+    </div>
+
+    <div id="toast-box"></div>
 </body>
 </html>
