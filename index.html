@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abdulkadir Turan | Full Stack Developer</title>
+    <title>Abdulkadir Turan | Creative Developer</title>
     <link rel="icon" href="https://github.com/TuranAbdulkadir.png" type="image/png">
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
+    
     <style>
         /* --- 1. CORE SETTINGS --- */
         :root {
@@ -18,281 +17,161 @@
             --glass: rgba(255, 255, 255, 0.03);
             --glass-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.08);
-            --primary: #00f2ea; /* Electric Cyan */
-            --secondary: #ff0050; /* Cyber Red */
+            --primary: #00f2ea;
+            --secondary: #ff0050;
             --text: #ffffff;
             --text-muted: #a1a1aa;
             --font-main: 'Outfit', sans-serif;
             --font-code: 'JetBrains Mono', monospace;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* Özel cursor aktif */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         
         html { scroll-behavior: smooth; }
         body { background-color: var(--bg); font-family: var(--font-main); color: var(--text); overflow-x: hidden; }
 
+        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
-        /* --- 2. INTERACTIVE BACKGROUND (CANVAS) --- */
-        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        /* --- 2. CUSTOM CONTEXT MENU (SAĞ TIK) --- */
+        .context-menu {
+            position: fixed; z-index: 999999; width: 220px;
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px);
+            border: 1px solid var(--primary); border-radius: 8px; padding: 10px 0;
+            box-shadow: 0 0 20px rgba(0, 242, 234, 0.2);
+            transform: scale(0); transform-origin: top left; transition: transform 0.2s ease-out;
+            display: none;
+        }
+        .context-menu.visible { transform: scale(1); display: block; }
+        .menu-item {
+            padding: 12px 20px; color: var(--text); font-size: 0.9rem; cursor: pointer;
+            transition: 0.2s; display: flex; align-items: center; gap: 10px; font-family: var(--font-code);
+        }
+        .menu-item:hover { background: rgba(0, 242, 234, 0.1); color: var(--primary); padding-left: 25px; }
+        .menu-item i { width: 20px; text-align: center; }
+        .menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 5px 0; }
 
-        /* --- 3. CUSTOM CURSOR --- */
-        .cursor {
-            width: 20px; height: 20px; border: 1px solid var(--text); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference;
-            transition: transform 0.1s; transform: translate(-50%, -50%);
+        /* --- 3. TOAST NOTIFICATIONS (BİLDİRİM) --- */
+        #toast-box {
+            position: fixed; bottom: 30px; right: 30px; z-index: 999999;
+            display: flex; flex-direction: column; gap: 10px; pointer-events: none;
         }
-        .cursor-dot {
-            width: 4px; height: 4px; background: var(--primary); border-radius: 50%;
-            position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+        .toast {
+            background: rgba(5, 5, 5, 0.9); border-left: 4px solid var(--primary);
+            color: #fff; padding: 15px 25px; border-radius: 4px;
+            font-family: var(--font-code); font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px;
+            animation: slideIn 0.5s ease forwards, fadeOut 0.5s ease 3s forwards; min-width: 250px;
         }
+        .toast i { color: var(--primary); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        /* --- 4. PRELOADER --- */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
+        .cyber-loader { width: 50px; height: 50px; border: 3px solid var(--border); border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- 5. CUSTOM MOUSE --- */
+        .cursor { width: 20px; height: 20px; border: 1px solid var(--text); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s; transform: translate(-50%, -50%); }
+        .cursor-dot { width: 4px; height: 4px; background: var(--primary); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
         .hovered-cursor { transform: translate(-50%, -50%) scale(3); background: rgba(255,255,255,0.2); border-color: transparent; }
 
-        /* --- 4. NAVBAR --- */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between;
-            align-items: center; z-index: 100; backdrop-filter: blur(12px); background: rgba(10, 10, 10, 0.6);
-            border-bottom: 1px solid var(--border);
-        }
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text); font-family: var(--font-main); }
-        .logo span { color: var(--primary); }
-        
+        /* --- 6. BACKGROUND --- */
+        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+
+        /* --- 7. NAVBAR --- */
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 100; backdrop-filter: blur(12px); background: rgba(10, 10, 10, 0.6); border-bottom: 1px solid var(--border); }
+        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text); } .logo span { color: var(--primary); }
         .nav-links { display: flex; gap: 30px; list-style: none; }
-        .nav-links a {
-            text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500;
-            transition: 0.3s; position: relative; text-transform: uppercase; letter-spacing: 1px;
-        }
+        .nav-links a { text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: 0.3s; position: relative; text-transform: uppercase; letter-spacing: 1px; }
         .nav-links a:hover { color: var(--primary); }
-        .nav-links a::after {
-            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
-            background: var(--primary); transition: 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
+        .menu-toggle { display: none; font-size: 1.5rem; color: var(--text); }
 
-        /* --- 5. HERO SECTION --- */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 0 20px; position: relative;
-        }
-        .hero-badge {
-            padding: 8px 16px; background: rgba(0, 242, 234, 0.1); border: 1px solid var(--primary);
-            border-radius: 20px; color: var(--primary); font-family: var(--font-code); font-size: 0.8rem; margin-bottom: 20px;
-        }
-        .hero h1 {
-            font-size: 5rem; line-height: 1.1; font-weight: 800; margin-bottom: 20px;
-            background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin-bottom: 40px;
-        }
-        
-        .btn-group { display: flex; gap: 20px; }
-        .btn {
-            padding: 15px 35px; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s;
-            font-family: var(--font-main); display: flex; align-items: center; gap: 10px;
-        }
-        .btn-primary { background: var(--text); color: #000; border: 1px solid var(--text); }
-        .btn-primary:hover { background: transparent; color: var(--text); transform: translateY(-3px); }
-        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
-        .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
+        /* --- 8. HERO --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-size: 5rem; line-height: 1.1; font-weight: 800; margin-bottom: 20px; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin-bottom: 40px; }
+        .btn-main { padding: 15px 35px; background: var(--text); color: #000; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        .btn-main:hover { transform: translateY(-3px); background: var(--primary); }
 
-        /* --- 6. ABOUT & STATS --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
-        .section-title { font-size: 2.5rem; margin-bottom: 60px; font-weight: 700; }
-        .section-title span { color: var(--primary); }
+        /* --- SECTIONS --- */
+        section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 60px; text-align: center; }
+        .reveal { opacity: 0; transform: translateY(50px); transition: 0.8s; } .reveal.active { opacity: 1; transform: translateY(0); }
 
+        /* --- ABOUT --- */
         .about-wrapper { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; align-items: center; }
-        .profile-card {
-            background: var(--glass); border: 1px solid var(--border); padding: 20px; border-radius: 20px;
-            position: relative;
-        }
-        .profile-card img { width: 100%; border-radius: 12px; filter: grayscale(100%); transition: 0.5s; }
-        .profile-card:hover img { filter: grayscale(0%); }
-        
-        .stats-row { display: flex; gap: 30px; margin-top: 30px; }
-        .stat-item h3 { font-size: 2.5rem; color: var(--text); margin-bottom: 5px; }
-        .stat-item p { font-family: var(--font-code); font-size: 0.8rem; color: var(--text-muted); }
+        .profile-card { background: var(--glass); border: 1px solid var(--border); padding: 20px; border-radius: 20px; }
+        .profile-card img { width: 100%; border-radius: 12px; }
 
-        /* --- 7. PROJECTS (Glassmorphism) --- */
+        /* --- PROJECTS --- */
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .card {
-            background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 30px;
-            transition: 0.4s; position: relative; overflow: hidden; display: flex; flex-direction: column;
-        }
-        .card:hover { border-color: var(--primary); transform: translateY(-10px); background: var(--glass-hover); }
-        
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .folder-icon { font-size: 2rem; color: var(--primary); }
-        .card-links a { color: var(--text-muted); font-size: 1.2rem; margin-left: 15px; transition: 0.3s; }
-        .card-links a:hover { color: var(--text); }
-        
-        .card h3 { font-size: 1.4rem; margin-bottom: 10px; }
-        .card p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; flex-grow: 1; }
-        
-        .tech-list { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
-        .tech-tag { font-family: var(--font-code); font-size: 0.75rem; color: var(--primary); }
+        .project-card { background: var(--glass); border: 1px solid var(--border); border-radius: 16px; padding: 30px; transition: 0.4s; }
+        .project-card:hover { transform: translateY(-10px); border-color: var(--primary); }
+        .folder-icon { font-size: 2rem; color: var(--secondary); margin-bottom: 20px; }
+        .card-links a { float: right; color: var(--text-muted); font-size: 1.2rem; } .card-links a:hover { color: var(--text); }
 
-        /* --- 8. TERMINAL (Interactive) --- */
-        .terminal-wrapper {
-            background: #0d1117; border: 1px solid var(--border); border-radius: 12px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); overflow: hidden; max-width: 800px; margin: 0 auto;
-        }
-        .terminal-header {
-            background: #161b22; padding: 12px 20px; display: flex; align-items: center; border-bottom: 1px solid var(--border);
-        }
-        .terminal-dots { display: flex; gap: 8px; margin-right: 15px; }
+        /* --- TERMINAL --- */
+        .terminal-wrapper { background: #0d1117; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; max-width: 800px; margin: 0 auto; }
+        .terminal-header { background: #161b22; padding: 10px 15px; display: flex; gap: 8px; }
         .dot { width: 12px; height: 12px; border-radius: 50%; }
         .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
-        .terminal-title { font-family: var(--font-code); font-size: 0.8rem; color: var(--text-muted); }
-        
-        .terminal-body { padding: 20px; font-family: var(--font-code); height: 300px; overflow-y: auto; font-size: 0.9rem; }
-        .command-output { color: #c9d1d9; margin-bottom: 10px; line-height: 1.5; }
-        .input-line { display: flex; align-items: center; color: #c9d1d9; }
+        .terminal-body { padding: 20px; height: 300px; overflow-y: auto; font-family: var(--font-code); font-size: 0.9rem; color: #c9d1d9; }
         .prompt { color: var(--primary); margin-right: 10px; }
         #cmd-input { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-family: inherit; }
 
-        /* --- 9. MUSIC PLAYER WIDGET (Floating) --- */
-        .music-player {
-            position: fixed; bottom: 30px; left: 30px; background: rgba(10, 10, 10, 0.8);
-            backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px;
-            padding: 15px; display: flex; align-items: center; gap: 15px; z-index: 99;
-            width: 280px; transition: 0.3s;
-        }
-        .music-player:hover { border-color: var(--primary); }
-        .album-art {
-            width: 50px; height: 50px; background: #222; border-radius: 8px; overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
-        }
-        .album-art i { font-size: 1.5rem; color: var(--text-muted); }
+        /* --- MUSIC PLAYER --- */
+        .music-player { position: fixed; bottom: 30px; left: 30px; background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 15px; z-index: 99; width: 280px; transition: 0.3s; }
+        .album-art { width: 40px; height: 40px; background: #222; border-radius: 8px; display: flex; justify-content: center; align-items: center; }
         .music-info { flex: 1; overflow: hidden; }
-        .song-title { font-size: 0.9rem; font-weight: 600; white-space: nowrap; animation: marquee 10s linear infinite; }
-        .artist-name { font-size: 0.8rem; color: var(--text-muted); }
-        .controls { display: flex; gap: 10px; }
-        .ctrl-btn { background: none; border: none; color: var(--text); cursor: none; transition: 0.2s; }
-        .ctrl-btn:hover { color: var(--primary); }
-        
-        /* Ses çalıyor animasyonu */
-        .music-player.playing .album-art i { animation: pulse-beat 1s infinite; color: var(--primary); }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        @keyframes pulse-beat { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .song-title { font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+        .ctrl-btn { background: none; border: none; color: var(--text); cursor: none; font-size: 1.2rem; transition: 0.2s; }
+        .playing .album-art i { animation: pulse 1s infinite; color: var(--primary); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        /* --- 10. CONTACT & FOOTER --- */
-        .contact-box { text-align: center; max-width: 600px; margin: 0 auto; }
-        .form-group { margin-bottom: 20px; }
-        .form-input {
-            width: 100%; padding: 15px; background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-            border-radius: 8px; color: var(--text); outline: none; font-family: var(--font-main);
-        }
-        .form-input:focus { border-color: var(--primary); background: rgba(255,255,255,0.05); }
-        textarea.form-input { height: 120px; resize: none; }
+        /* --- CONTACT --- */
+        .contact-box { max-width: 600px; margin: 0 auto; text-align: center; background: var(--glass); padding: 50px; border-radius: 20px; border: 1px solid var(--border); }
 
-        footer { padding: 50px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; }
+        footer { padding: 50px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); margin-top: 100px; }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 768px) {
-            .hero h1 { font-size: 3rem; }
-            .about-wrapper { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .music-player { bottom: 10px; left: 10px; width: calc(100% - 20px); }
+            .hero h1 { font-size: 3rem; } .about-wrapper { grid-template-columns: 1fr; }
+            .nav-links { display: none; } .music-player { bottom: 10px; left: 10px; width: calc(100% - 20px); }
             .cursor, .cursor-dot { display: none; }
         }
-    /* --- YENİ EKLENEN: CUSTOM CONTEXT MENU (SAĞ TIK) --- */
-        .context-menu {
-            position: fixed;
-            z-index: 999999;
-            width: 200px;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--primary);
-            border-radius: 8px;
-            padding: 10px 0;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-            transform: scale(0);
-            transform-origin: top left;
-            transition: transform 0.2s ease-out;
-            display: none; /* Başlangıçta gizli */
-        }
-        
-        .context-menu.visible {
-            transform: scale(1);
-            display: block;
-        }
-
-        .menu-item {
-            padding: 10px 20px;
-            color: var(--text);
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-code);
-        }
-
-        .menu-item:hover {
-            background: rgba(0, 243, 255, 0.1);
-            color: var(--primary);
-            padding-left: 25px; /* Hover'da sağa kayma efekti */
-        }
-        
-        .menu-item i { width: 20px; text-align: center; }
-        .menu-item.disabled { color: var(--text-gray); cursor: default; font-size: 0.7rem; pointer-events: none; }
-
-        /* --- YENİ EKLENEN: TOAST BİLDİRİMİ --- */
-        #toast-box {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 999999;
-        }
-
-        .toast {
-            background: rgba(5, 5, 5, 0.9);
-            border-left: 4px solid var(--primary);
-            color: #fff;
-            padding: 15px 25px;
-            border-radius: 4px;
-            font-family: var(--font-code);
-            font-size: 0.9rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            animation: slideIn 0.5s ease forwards, fadeOut 0.5s ease 3s forwards;
-            min-width: 250px;
-        }
-        
-        .toast i { color: var(--primary); }
-
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; pointer-events: none; } }
     </style>
 </head>
 <body>
 
+    <div id="context-menu" class="context-menu">
+        <div class="menu-item" onclick="window.location.reload()"><i class="fas fa-sync-alt"></i> Sistemi Yenile</div>
+        <div class="menu-item" onclick="window.open('https://github.com/TuranAbdulkadir', '_blank')"><i class="fab fa-github"></i> GitHub Profili</div>
+        <div class="menu-item" onclick="window.location.href='#projects'"><i class="fas fa-box-open"></i> Projeleri İncele</div>
+        <div class="menu-divider"></div>
+        <div class="menu-item" style="color:var(--text-muted); pointer-events:none;"><i class="fas fa-terminal"></i> System Active</div>
+    </div>
+
+    <div id="toast-box"></div>
+
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_18d698d92e.mp3" type="audio/mp3">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mp3">
     </audio>
-    
-    <canvas id="canvas-bg"></canvas>
+
+    <div id="preloader"><div class="cyber-loader"></div></div>
     <div class="cursor"></div><div class="cursor-dot"></div>
+    <canvas id="canvas-bg"></canvas>
 
     <div class="music-player" id="player-ui">
         <div class="album-art"><i class="fas fa-music"></i></div>
         <div class="music-info">
-            <div class="song-title">Cyberpunk Coding Session - Lofi Mix</div>
-            <div class="artist-name">Abdulkadir's Playlist</div>
+            <div class="song-title">Cyberpunk Vibes</div>
+            <div style="font-size:0.7rem; color:#888;">Abdulkadir's Radio</div>
         </div>
-        <div class="controls">
-            <button class="ctrl-btn" onclick="toggleMusic()"><i class="fas fa-play" id="play-icon"></i></button>
-        </div>
+        <button class="ctrl-btn hover-target" onclick="toggleMusic()"><i class="fas fa-play" id="play-icon"></i></button>
     </div>
 
     <nav>
@@ -305,108 +184,65 @@
         </ul>
     </nav>
 
-    <section class="hero" data-aos="fade-up">
+    <section class="hero reveal">
         <div class="hero-badge">AVAILABLE FOR HIRE</div>
         <h1>Dijital Dünyayı<br>Yeniden Kodluyoruz.</h1>
         <p>Çukurova Üniversitesi'nde Bilgisayar Programcılığı öğrencisi. Python, Otomasyon ve Modern Web Teknolojileri ile sınırları zorluyorum.</p>
         <div class="btn-group">
-            <a href="#projects" class="btn btn-primary hover-target">Projelerimi Gör <i class="fas fa-arrow-right"></i></a>
-            <a href="#contact" class="btn btn-outline hover-target">İletişim</a>
+            <a href="#projects" class="btn-main hover-target">Projelerimi Gör</a>
         </div>
     </section>
 
-    <section id="about" class="container">
+    <section id="about" class="container reveal">
+        <h2 class="section-title">Hakkımda</h2>
         <div class="about-wrapper">
-            <div class="about-img" data-aos="fade-right">
-                <div class="profile-card">
-                    <img src="https://github.com/TuranAbdulkadir.png" alt="Profil">
-                </div>
+            <div class="profile-card">
+                <img src="https://github.com/TuranAbdulkadir.png" alt="Profil">
             </div>
-            <div class="about-text" data-aos="fade-left">
-                <h2 class="section-title">Hakkımda<span>.</span></h2>
-                <p style="margin-bottom: 20px; color: var(--text-muted);">
-                    Kodlama serüvenim QBasic ile başladı, ancak merakım beni modern yazılım mühendisliğinin derinliklerine sürükledi. Benim için kod yazmak, sadece bir iş değil; bir sanat ve problem çözme biçimidir.
+            <div class="about-text">
+                <p style="color:var(--text-muted); line-height:1.8; margin-bottom:20px;">
+                    Kodlama serüvenim QBasic ile başladı, şimdi modern yazılım dünyasında profesyonel çözümler üretiyorum. Çukurova Üniversitesi'nde aldığım eğitimi, güncel teknolojilerle birleştirerek sağlam altyapılı projeler geliştiriyorum.
                 </p>
-                <p style="color: var(--text-muted);">
-                    Şu anda <strong>Backend Mimarileri</strong> ve <strong>Kullanıcı Deneyimi (UX)</strong> odaklı projeler geliştiriyorum. Hedefim, global ölçekte kullanılan SaaS ürünleri tasarlamak.
-                </p>
-                <div class="stats-row">
-                    <div class="stat-item"><h3>20+</h3><p>Tamamlanan Proje</p></div>
-                    <div class="stat-item"><h3>100%</h3><p>Müşteri Memnuniyeti</p></div>
-                    <div class="stat-item"><h3>2+</h3><p>Yıl Deneyim</p></div>
-                </div>
+                <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=TuranAbdulkadir&layout=compact&theme=dark&bg_color=00000000&hide_border=true&title_color=00f2ea&text_color=f8fafc" style="width:100%">
             </div>
         </div>
     </section>
 
-    <section id="projects" class="container">
-        <h2 class="section-title" data-aos="fade-up">Seçilmiş İşler<span>.</span></h2>
+    <section id="projects" class="container reveal">
+        <h2 class="section-title">Projeler</h2>
         <div class="projects-grid">
-            
-            <div class="card" data-aos="fade-up" data-aos-delay="100">
-                <div class="card-header">
-                    <i class="fas fa-box-open folder-icon"></i>
-                    <div class="card-links">
-                        <a href="https://github.com/TuranAbdulkadir/Python-Mini-Projects-V2" target="_blank" class="hover-target"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
+            <div class="project-card hover-target">
+                <i class="fas fa-box-open folder-icon"></i>
+                <div class="card-links"><a href="https://github.com/TuranAbdulkadir/Python-Mini-Projects-V2" target="_blank"><i class="fab fa-github"></i></a></div>
                 <h3>Python Mega Pack</h3>
-                <p>20+ Farklı Python otomasyon aracı ve algoritma örneği. Hız testi, BMI, Şifre analizi ve dahası tek pakette.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Automation</span>
-                    <span class="tech-tag">Scripting</span>
-                </div>
+                <p>20+ Farklı otomasyon aracı, oyun ve algoritma örneği içeren dev Python arşivi.</p>
             </div>
-
-            <div class="card" data-aos="fade-up" data-aos-delay="200">
-                <div class="card-header">
-                    <i class="fas fa-code folder-icon"></i>
-                    <div class="card-links">
-                        <a href="https://github.com/TuranAbdulkadir?tab=repositories" target="_blank" class="hover-target"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                <h3>QBasic Algorithms</h3>
-                <p>Programlamanın temeli. Matematiksel hesaplamalar, döngü yapıları ve mantık kurma üzerine arşiv.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">QBasic</span>
-                    <span class="tech-tag">Algorithms</span>
-                    <span class="tech-tag">Math</span>
-                </div>
+            <div class="project-card hover-target">
+                <i class="fas fa-code folder-icon"></i>
+                <div class="card-links"><a href="https://github.com/TuranAbdulkadir?tab=repositories" target="_blank"><i class="fab fa-github"></i></a></div>
+                <h3>QBasic Algoritmalar</h3>
+                <p>Programlamanın temeli. Matematiksel hesaplamalar ve döngü yapıları üzerine kod arşivi.</p>
             </div>
-
-            <div class="card" data-aos="fade-up" data-aos-delay="300">
-                <div class="card-header">
-                    <i class="fas fa-globe folder-icon"></i>
-                    <div class="card-links">
-                        <a href="#" class="hover-target"><i class="fas fa-external-link-alt"></i></a>
-                    </div>
-                </div>
+            <div class="project-card hover-target">
+                <i class="fas fa-globe folder-icon"></i>
+                <div class="card-links"><a href="#"><i class="fas fa-external-link-alt"></i></a></div>
                 <h3>Ultimate Portfolio</h3>
-                <p>Bu web sitesi. Three.js parçacık efektleri, etkileşimli terminal ve modern CSS ile tasarlandı.</p>
-                <div class="tech-list">
-                    <span class="tech-tag">HTML5</span>
-                    <span class="tech-tag">CSS3</span>
-                    <span class="tech-tag">JS</span>
-                </div>
+                <p>Three.js ve modern CSS animasyonlarıyla güçlendirilmiş interaktif web sitesi.</p>
             </div>
-
         </div>
     </section>
 
-    <section id="terminal" class="container" data-aos="zoom-in">
-        <h2 class="section-title">Canlı Terminal<span>_</span></h2>
+    <section id="terminal" class="container reveal">
+        <h2 class="section-title">Canlı Terminal</h2>
         <div class="terminal-wrapper">
             <div class="terminal-header">
-                <div class="terminal-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
-                <span class="terminal-title">abdulkadir@portfolio:~</span>
+                <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
             </div>
             <div class="terminal-body" id="terminal-output">
-                <div class="command-output">Welcome to Abdulkadir OS [v10.0]</div>
-                <div class="command-output">Type <span style="color:var(--primary)">'help'</span> to see available commands.</div>
-                <br>
+                <div>Welcome to Abdulkadir OS [v10.2]</div>
+                <div>Type <span style="color:var(--primary)">'help'</span> to start.</div><br>
             </div>
-            <div class="input-line">
+            <div style="display:flex; padding:0 20px 20px;">
                 <span class="prompt">➜ ~</span>
                 <input type="text" id="cmd-input" autocomplete="off">
             </div>
@@ -414,232 +250,117 @@
     </section>
 
     <section id="contact" class="container reveal">
-        <h2 class="section-title" style="text-align: center;">İletişim<span>.</span></h2>
+        <h2 class="section-title">İletişim</h2>
         <div class="contact-box">
-            <p style="color:var(--text-muted); margin-bottom: 40px; font-size: 1.1rem;">
-                Birlikte harika şeyler inşa edelim. Proje teklifleri veya tanışmak için aşağıdaki butona basarak bana mail atabilirsin.
+            <p style="color:var(--text-muted); margin-bottom: 30px;">
+                Birlikte harika şeyler inşa edelim. Aşağıdaki butona basarak bana doğrudan mail atabilirsin.
             </p>
-            
-            <a href="mailto:abdulkadirturan524@gmail.com?subject=Proje%20Hakkında&body=Merhaba%20Abdulkadir," class="btn-main hover-target" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; max-width: 300px; margin: 0 auto;">
+            <a href="mailto:abdulkadirturan524@gmail.com?subject=Proje%20Hakkında&body=Merhaba%20Abdulkadir," class="btn-main hover-target" style="display:inline-flex; align-items:center; gap:10px; padding: 20px 50px;">
                 <i class="fas fa-paper-plane"></i> MAİL GÖNDER
             </a>
-
             <p style="margin-top: 30px; font-size: 0.9rem; color: var(--text-muted);">
-                veya adresi kopyala: <span style="color:var(--primary); user-select: all; cursor: pointer;">abdulkadirturan524@gmail.com</span>
+                veya kopyala: <span class="email-copy hover-target" style="color:var(--primary); cursor:pointer;">abdulkadirturan524@gmail.com</span>
             </p>
         </div>
     </section>
-    <footer>
-        <p>Designed & Built by Abdulkadir Turan © 2025</p>
-    </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <footer><p>Designed by Abdulkadir Turan © 2025</p></footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+
     <script>
-        // INIT ANIMATIONS
-        AOS.init({ duration: 1000, once: true });
+        // PRELOADER
+        window.onload = () => { setTimeout(() => { document.getElementById("preloader").style.opacity="0"; setTimeout(()=>document.getElementById("preloader").style.display="none",800); }, 1000); };
 
-        // 1. MUSIC PLAYER
+        // RIGHT CLICK MENU
+        const contextMenu = document.getElementById("context-menu");
+        document.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            contextMenu.style.top = `${e.clientY}px`;
+            contextMenu.style.left = `${e.clientX}px`;
+            contextMenu.classList.add("visible");
+            showToast("System Menu Accessed", "fa-terminal");
+        });
+        document.addEventListener("click", () => contextMenu.classList.remove("visible"));
+
+        // TOAST NOTIFICATION
+        function showToast(msg, icon="fa-info-circle") {
+            const box = document.getElementById("toast-box");
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.innerHTML = `<i class="fas ${icon}"></i> ${msg}`;
+            box.appendChild(toast);
+            setTimeout(()=>toast.remove(), 3500);
+        }
+
+        // COPY EMAIL
+        document.querySelector(".email-copy").addEventListener("click", function() {
+            navigator.clipboard.writeText(this.innerText);
+            showToast("Mail Adresi Kopyalandı!", "fa-copy");
+        });
+
+        // MUSIC PLAYER
         const bgMusic = document.getElementById('bg-music');
         const playIcon = document.getElementById('play-icon');
-        const playerUI = document.getElementById('player-ui');
-        
+        bgMusic.volume = 0.4;
         function toggleMusic() {
             if (bgMusic.paused) {
-                bgMusic.play();
-                playIcon.classList.remove('fa-play');
-                playIcon.classList.add('fa-pause');
-                playerUI.classList.add('playing');
+                bgMusic.play().then(() => {
+                    playIcon.classList.remove('fa-play'); playIcon.classList.add('fa-pause');
+                }).catch(e => console.log(e));
             } else {
                 bgMusic.pause();
-                playIcon.classList.remove('fa-pause');
-                playIcon.classList.add('fa-play');
-                playerUI.classList.remove('playing');
+                playIcon.classList.remove('fa-pause'); playIcon.classList.add('fa-play');
             }
         }
-        // Müzik sesini biraz kısalım, rahatsız etmesin
-        bgMusic.volume = 0.3;
 
-        // 2. CUSTOM CURSOR HOVER
-        const cursor = document.querySelector('.cursor');
-        const dot = document.querySelector('.cursor-dot');
-        
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px';
-            dot.style.left = e.clientX + 'px'; dot.style.top = e.clientY + 'px';
-        });
-
-        document.querySelectorAll('.hover-target').forEach(item => {
-            item.addEventListener('mouseenter', () => cursor.classList.add('hovered-cursor'));
-            item.addEventListener('mouseleave', () => cursor.classList.remove('hovered-cursor'));
-        });
-
-        // 3. TERMINAL LOGIC
+        // TERMINAL
         const cmdInput = document.getElementById('cmd-input');
-        const outputDiv = document.getElementById('terminal-output');
-        const commands = {
-            help: "Available commands: about, projects, contact, clear",
-            about: "I am Abdulkadir, a developer who loves clean code.",
-            projects: "I have 20+ projects on GitHub. Scroll up to see them!",
-            contact: "Mail me at: abdulkadirturan524@gmail.com",
-            clear: "clear"
-        };
-
-        cmdInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                const input = this.value.toLowerCase().trim();
-                const newLine = document.createElement('div');
-                newLine.innerHTML = `<span style="color:var(--primary)">➜ ~</span> ${input}`;
-                newLine.className = 'command-output';
-                outputDiv.appendChild(newLine);
-
-                if (commands[input]) {
-                    if(input === 'clear') outputDiv.innerHTML = '';
-                    else {
-                        const res = document.createElement('div');
-                        res.className = 'command-output';
-                        res.style.color = '#a1a1aa';
-                        res.innerText = commands[input];
-                        outputDiv.appendChild(res);
-                    }
-                } else if (input !== "") {
-                    const err = document.createElement('div');
-                    err.className = 'command-output';
-                    err.style.color = '#ff5f56';
-                    err.innerText = `Command not found: ${input}`;
-                    outputDiv.appendChild(err);
-                }
-                this.value = '';
-                outputDiv.scrollTop = outputDiv.scrollHeight;
-            }
-        });
-
-        // 4. CANVAS BACKGROUND (NEURAL NETWORK)
-        const canvas = document.getElementById("canvas-bg");
-        const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const outDiv = document.getElementById('terminal-output');
+        const cmds = { help: "Commands: about, projects, contact, clear", about: "Full Stack Developer from Turkey.", projects: "Check the section above!", contact: "abdulkadirturan524@gmail.com", clear: "clear" };
         
-        let particles = [];
-        class Particle {
-            constructor(){
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * 1 - 0.5;
+        document.querySelector('.terminal-wrapper').addEventListener('click', () => cmdInput.focus());
+        
+        cmdInput.addEventListener('keydown', function(e){
+            if(e.key==='Enter'){
+                const val = this.value.toLowerCase().trim();
+                outDiv.innerHTML += `<div><span style="color:var(--primary)">➜ ~</span> ${val}</div>`;
+                if(cmds[val]){
+                    if(val==='clear') outDiv.innerHTML='';
+                    else outDiv.innerHTML += `<div style="color:#ccc;margin-bottom:10px">${cmds[val]}</div>`;
+                } else if(val) { outDiv.innerHTML += `<div style="color:#ff5f56">Command not found</div>`; }
+                this.value=''; outDiv.scrollTop=outDiv.scrollHeight;
             }
-            update(){
-                this.x += this.speedX; this.y += this.speedY;
-                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
-                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
-            }
-            draw(){
-                ctx.fillStyle = 'rgba(0, 242, 234, 0.5)';
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
-            }
-        }
-        for (let i=0; i<100; i++) particles.push(new Particle());
+        });
 
-        function animate(){
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            for(let i=0; i<particles.length; i++){
-                particles[i].update(); particles[i].draw();
-                for(let j=i; j<particles.length; j++){
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx*dx + dy*dy);
-                    if(distance < 100){
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 242, 234, ${1 - distance/100})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-        animate();
-        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-   // TERMINAL ODAKLANMA (FOCUS) DÜZELTMESİ
-        const terminalWrapper = document.querySelector('.terminal-wrapper');
-        const terminalInput = document.getElementById('cmd-input');
-
-        if(terminalWrapper && terminalInput) {
-            terminalWrapper.addEventListener('click', () => {
-                terminalInput.focus();
+        // CANVAS BG
+        const cvs = document.getElementById("canvas-bg"), ctx = cvs.getContext("2d");
+        cvs.width = window.innerWidth; cvs.height = window.innerHeight;
+        let parts = [];
+        for(let i=0;i<60;i++) parts.push({x:Math.random()*cvs.width, y:Math.random()*cvs.height, vx:Math.random()-0.5, vy:Math.random()-0.5});
+        function anim(){
+            ctx.clearRect(0,0,cvs.width,cvs.height);
+            parts.forEach((p,i)=>{
+                p.x+=p.vx; p.y+=p.vy;
+                if(p.x<0||p.x>cvs.width) p.vx*=-1; if(p.y<0||p.y>cvs.height) p.vy*=-1;
+                ctx.fillStyle='#00f2ea'; ctx.beginPath(); ctx.arc(p.x,p.y,2,0,Math.PI*2); ctx.fill();
+                parts.slice(i+1).forEach(p2=>{
+                    let d = Math.hypot(p.x-p2.x, p.y-p2.y);
+                    if(d<150){ ctx.strokeStyle=`rgba(0,242,234,${1-d/150})`; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+                });
             });
+            requestAnimationFrame(anim);
         }
-   // --- YENİ ÖZELLİK: SAĞ TIK MENÜSÜ ---
-        const contextMenu = document.getElementById("context-menu");
-        const scope = document.querySelector("body");
+        anim();
+        window.addEventListener('resize', ()=>{ cvs.width=window.innerWidth; cvs.height=window.innerHeight; });
 
-        // Sağ tıklandığında menüyü aç
-        scope.addEventListener("contextmenu", (event) => {
-            event.preventDefault(); // Standart menüyü engelle
-            
-            const { clientX: mouseX, clientY: mouseY } = event;
-            
-            // Menü pozisyonunu ayarla
-            contextMenu.style.top = `${mouseY}px`;
-            contextMenu.style.left = `${mouseX}px`;
-            
-            // Menüyü göster
-            contextMenu.classList.remove("visible");
-            setTimeout(() => {
-                contextMenu.classList.add("visible");
-            });
-            
-            showToast("System Menu Accessed", "fa-terminal"); // Bildirim gönder
-        });
-
-        // Başka yere tıklayınca kapat
-        scope.addEventListener("click", (e) => {
-            if (e.target.offsetParent != contextMenu) {
-                contextMenu.classList.remove("visible");
-            }
-        });
-
-        // --- YENİ ÖZELLİK: BİLDİRİM SİSTEMİ (TOAST) ---
-        function showToast(message, icon = "fa-check-circle") {
-            const toastBox = document.getElementById("toast-box");
-            const toast = document.createElement("div");
-            toast.classList.add("toast");
-            toast.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-            toastBox.appendChild(toast);
-
-            // 3.5 saniye sonra kutuyu DOM'dan sil
-            setTimeout(() => {
-                toast.remove();
-            }, 3500);
-        }
-
-        // Örnek: Mail kopyalandığında (İletişim kısmındaki mail yazısına tıklanınca)
-        const emailText = document.querySelector(".email-link"); // Eğer sınıf varsa
-        // Veya genel kopyalama eventi
-        document.addEventListener('copy', () => {
-            showToast("Kopyalandı! (Clipboard)", "fa-copy");
-        });
-   </script>
-<div id="context-menu" class="context-menu">
-        <div class="menu-item" onclick="window.location.reload()">
-            <i class="fas fa-sync-alt"></i> Sistemi Yenile
-        </div>
-        <div class="menu-item" onclick="window.open('https://github.com/TuranAbdulkadir', '_blank')">
-            <i class="fab fa-github"></i> GitHub Profili
-        </div>
-        <div class="menu-item" onclick="window.location.href='#projects'">
-            <i class="fas fa-box-open"></i> Projeleri İncele
-        </div>
-        <div class="menu-item" onclick="window.location.href='#contact'">
-            <i class="fas fa-envelope"></i> Bana Ulaş
-        </div>
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 5px 0;">
-        <div class="menu-item disabled">
-            <i class="fas fa-terminal"></i> v10.2 System Active
-        </div>
-    </div>
-
-    <div id="toast-box"></div>
+        // MOUSE & TILT
+        const cursor=document.querySelector('.cursor'), dot=document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove',e=>{ cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px'; dot.style.left=e.clientX+'px'; dot.style.top=e.clientY+'px'; });
+        document.querySelectorAll('.hover-target').forEach(el=>{ el.addEventListener('mouseenter',()=>cursor.classList.add('hovered')); el.addEventListener('mouseleave',()=>cursor.classList.remove('hovered')); });
+        window.addEventListener('scroll', ()=>{ document.querySelectorAll('.reveal').forEach(r=>{ if(r.getBoundingClientRect().top < window.innerHeight-100) r.classList.add('active'); }); });
+        VanillaTilt.init(document.querySelectorAll(".project-card"), { max: 10, speed: 400, glare: true, "max-glare": 0.1 });
+    </script>
 </body>
 </html>
