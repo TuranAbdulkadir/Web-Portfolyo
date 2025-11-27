@@ -487,6 +487,15 @@
         }
         animate();
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-    </script>
+   // TERMINAL ODAKLANMA (FOCUS) DÜZELTMESİ
+        const terminalWrapper = document.querySelector('.terminal-wrapper');
+        const terminalInput = document.getElementById('cmd-input');
+
+        if(terminalWrapper && terminalInput) {
+            terminalWrapper.addEventListener('click', () => {
+                terminalInput.focus();
+            });
+        }
+   </script>
 </body>
 </html>
