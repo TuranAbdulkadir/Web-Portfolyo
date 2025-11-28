@@ -309,27 +309,51 @@
             setTimeout(() => document.getElementById('secret-msg').style.display = 'none', 3000);
         }
 
-        // TERMINAL
-        document.querySelector('.terminal-wrapper').addEventListener('click', () => { document.getElementById('cmd-input').focus(); });
+    // TERMINAL LOGIC (GÜNCELLENDİ)
         const cmdInput = document.getElementById('cmd-input');
         const outDiv = document.getElementById('terminal-output');
+        
+        // Komut Listesi
         const cmds = { 
-            help: "Commands: about, projects, contact, matrix, clear", 
+            help: "Commands: about, projects, contact, matrix, exit, clear", 
             about: "Full Stack Developer from Turkey.", 
             projects: "Check the section above!", 
             contact: "abdulkadirturan524@gmail.com",
             matrix: "Accessing the mainframe... (Theme changed!)",
+            exit: "System restoring...", 
+            reset: "System restoring...",
             clear: "clear" 
         };
+        
+        // Siyah kutunun her yerine tıklayınca odaklanma
+        document.querySelector('.terminal-wrapper').addEventListener('click', () => { 
+            document.getElementById('cmd-input').focus(); 
+        });
+        
+        // Yazı yazma ve Enter'a basma olayı
         cmdInput.addEventListener('keydown', function(e){
             if(e.key==='Enter'){
                 const val = this.value.toLowerCase().trim();
                 outDiv.innerHTML += `<div><span style="color:var(--primary)">➜ ~</span> ${val}</div>`;
+                
                 if(cmds[val]){
-                    if(val==='clear') outDiv.innerHTML='';
-                    else if(val==='matrix') { activateMatrix(); outDiv.innerHTML += `<div style="color:#00ff41">System hacked. Welcome to the Matrix.</div>`; }
-                    else outDiv.innerHTML += `<div style="color:#ccc;margin-bottom:10px">${cmds[val]}</div>`;
-                } else if(val) { outDiv.innerHTML += `<div style="color:#ff5f56">Command not found</div>`; }
+                    if(val==='clear') {
+                        outDiv.innerHTML='';
+                    }
+                    else if(val==='matrix') { 
+                        activateMatrix(); 
+                        outDiv.innerHTML += `<div style="color:#00ff41">System hacked. Welcome to the Matrix.</div>`; 
+                    }
+                    else if(val==='exit' || val==='reset') { 
+                        document.body.classList.remove('matrix-mode'); 
+                        outDiv.innerHTML += `<div style="color:var(--primary)">System rebooted. Theme restored.</div>`; 
+                    }
+                    else {
+                        outDiv.innerHTML += `<div style="color:#ccc;margin-bottom:10px">${cmds[val]}</div>`;
+                    }
+                } else if(val) { 
+                    outDiv.innerHTML += `<div style="color:#ff5f56">Command not found</div>`; 
+                }
                 this.value=''; outDiv.scrollTop=outDiv.scrollHeight;
             }
         });
